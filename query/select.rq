@@ -1,0 +1,5 @@
+#select to create a list for finding entities
+select ?s ?o where {{
+  ?s ?p ?o .
+  filter(regex(str(?o)), {0}) 
+}}

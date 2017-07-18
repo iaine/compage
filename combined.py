@@ -1,0 +1,57 @@
+'''
+   Create two named graph
+'''
+import json
+
+from sparqldao import SparqlDao
+from file_ops import FileOps
+
+class JoinGraph:
+
+    def __init__(self, endpoint):
+        self.endpoint = endpoint
+
+    def deduplicate_data(self, a, b):
+        '''
+           Deduplicating data
+        '''
+        return list(set(a) - set(b))
+
+    def calculate_similarity_perc(self, lista, listb):
+        '''
+            Return similarities. Useful for filtering
+        '''
+        return float(len(lista))/float(len(listb))
+
+    def get_data_list(self, searchstr):
+        qry_string = FileOps().open('query/walk_path_query.rq').format(searchstr)
+        data = sd.run_remote_sparql(self.endpoint, qry_string)
+        r_data = 
+
+    def join_graphs(self, graph):
+        merged_data = []
+
+        original = []
+        sd = SparqlDao()
+        
+        qry_string = FileOps().open('query/original_author.rq') 
+        qry_string = qry_string.format(graph)
+        original = sd.run_remote_sparql(self.endpoint, qry_string)
+
+        #get the other graphs linked by VIAF
+        qry_string = FileOps().open('query/walk_path_query.rq')
+        qry_string = qry_string.format(graph)
+
+        merged_data = sd.run_remote_sparql(self.endpoint, qry_string)
+
+        link = []
+        unlink = []
+        for merge in merged_data:
+            for orig in original:
+                if orig[2] == merge[2] and orig[1] == merge[1]:
+                    link.append(merge)
+
+            if merge[1] not in link:
+                unlink.append(merge)
+
+        return json.dumps({"original":original,"link":link,"difference":self.deduplicate_data(unlink,link),"similarity":self.calculate_similarity_perc(link,original)})

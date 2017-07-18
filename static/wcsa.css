@@ -1,0 +1,22 @@
+#original,
+#linked, 
+#difference {
+   display: inline-block;
+   margin: 1%;
+   border: 1px solid;
+   width: 44%;
+   font-size: 0.75em;
+   padding: 1%;
+}
+
+#original {
+    width: 50%;
+}
+
+#linked {
+   background-color: #66CDAA; 
+}
+
+#difference {
+   background-color: #F08080;
+}

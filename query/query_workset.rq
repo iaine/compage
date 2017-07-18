@@ -1,0 +1,6 @@
+#select distinct lines from existing worksets where a creator is known 
+select distinct ?ws ?o ?title where {{
+   ?ws ?p ?o .
+   ?o <http://eeboo.oerc.ox.ac.uk/eeboo/creator> {0}.
+    ?o rdfs:label ?title .
+}}

@@ -1,0 +1,10 @@
+#Walks a property path from the delivered from the UI and returns results
+select ?s ?p ?o where {{  ?s ?p ?o . 
+            {{ 
+                select ?s where {{ 
+                  bind (<{0}> as ?pers) . 
+                  ?pers <http://eeboo.oerc.ox.ac.uk/eeboo/hasExternalAuthorityVIAF>/^<http://eeboo.oerc.ox.ac.uk/eeboo/hasExternalAuthorityVIAF> ?s . 
+                  filter(?pers != ?s) . 
+                }} 
+            }} 
+        }}

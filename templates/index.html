@@ -1,0 +1,155 @@
+<!doctype html>
+<head>
+<title>Data</title>
+<link rel="stylesheet" type="text/css" href="/static/wcsa.css">
+<script src="https://unpkg.com/compromise@latest/builds/compromise.min.js"></script>
+<script src="/static/edit.js"></script>
+<script src="/static/stem.js"></script>
+</head>
+<body>
+<div id="entity">Arnauld Antoine,1560-1619<div id="ws"onclick="getLinks('http://eeboo.oerc.ox.ac.uk/eeboo/Arnauld_Antoine_1560-1619');">Search Workset</div><div id="data_all" onclick="getLinks('http://eeboo.oerc.ox.ac.uk/eeboo/Arnauld_Antoine_1560-1619');">Search All</div></div>
+<p id="log"/>
+<div id="edit"></div>
+<div id="lang"></div>
+<div id="sparql"></div>
+<div id="links">Replace me</div>
+<script>
+if (!window.Worker) {
+  alert('Please change to a different browser as this site needs workers to run.');
+}
+
+//set up some elements
+var langs = document.getElementById('lang')
+var sparql = document.getElementById('sparql')
+var links = document.getElementById('links')
+
+var linksWorker= new Worker('/static/links.js')
+
+//set up the workers and handle the return message
+var langWorker = new Worker('/static/stem.js');
+langWorker.onmessage = function(e) {
+  lang.textContent = e.data;
+}
+
+var sparqlWorker = new Worker('/static/sparql.js');
+sparqlWorker.onmessage = function(e) {
+  sparql.textContent = e.data;
+}
+
+linksWorker.onmessage = function(e) {
+  links.innerHTML = e.data;
+}
+
+
+
+//set up some elements
+var edits = document.getElementById('edit')
+
+//set up the workers and handle the return message
+var editWorker = new Worker('/static/edit.js');
+editWorker.onmessage = function(e) {
+  edits.textContent = e.data;
+}
+
+//set up the main call for the data to parse. 
+function reqListener () {
+  var recordData = JSON.parse(this.responseText);
+  //parseData(recordData[0]);
+  /*parseName(recordData[0]['Author']);
+  parseName(recordData[0]['Title']);
+  parseTopics(recordData[0]['Title']);
+  parseTranslation(recordData[0]['Title']);
+  parseSubjects(recordData[0]['Terms']);
+  editDistance('Lewis Evans', 'Lewys Euans');
+  queryThesaurus('Rurimonde');
+  variants('Guilelmus', 'William');*/
+  //getLinks('http://eeboo.oerc.ox.ac.uk/eeboo/Arnauld_Antoine_1560-1619');
+}
+
+var oReq = new XMLHttpRequest();
+oReq.addEventListener("load", reqListener);
+oReq.open("GET", "/data");
+oReq.send();
+
+function log(msg) {
+  var p = document.getElementById('log');
+  p.innerHTML = p.innerHTML + "<br />" + msg;
+}
+
+function parseName(data) {
+  var names = nlp(data);
+  if (data.indexOf(';') > 0) {
+     var auth = data.split(';');
+     log("<br />Author Names " + auth.join('<br />'))
+  } else {
+     log("<br />Names <br />" + names.people().out('list'));
+  }
+}
+
+function parseData(data) {
+    var html = "<br />";
+    for (var d in data) {
+        if (data.hasOwnProperty(d)) {
+          log(html.concat(d + " : " + data[d] + "<br />"));
+        }
+    }
+    log("Data <br />" + html);
+}
+
+function parseTopics(d) {
+   var topic = nlp(d);
+   log("<br />Topics: " + topic.topics().out('list'));
+}
+
+function parseSubjects(data) {
+  if (data.indexOf('--') > 0) {
+     var auth = data.split('--');
+     log("<br />Subjects " + auth.join('<br />'))
+  }
+}
+
+function parseTranslation(d) {
+   var trans = nlp(d);
+   log("<p>Translation: " + trans.match('translated into #Noun by #Noun #Noun').out('text')+"<p>");
+}
+
+/**
+*  Make into a webworker and call Python
+*/
+function editDistance(string_a, string_b) {
+    editWorker.postMessage([string_a, string_b]);
+    console.log('posting message to worker');
+}
+
+/**
+*  Make into a webworker and call Python
+*/
+function queryThesaurus(string_a) {
+    sparqlWorker.postMessage([string_a]);
+    console.log('posting message to worker');
+}
+
+/**
+*  Make into a webworker and call Python
+*/
+function variants(string_a, string_b) {
+    log(string_a + "is latin and " + string_b + " is English. Align?");
+}
+
+
+//define requirements but what do we need here? Assuming graph name 
+function getLinks(stringa) {
+    linksWorker.postMessage([stringa]);
+}
+
+function updateWeighting(original, different, weight) {
+var oReq = new XMLHttpRequest();
+//oReq.addEventListener("load", reqListener);
+oReq.open("POST", "/weight");
+data = JSON.stringify({ 'original' : original, 'different':different, 'weight': weight});
+oReq.send(data);
+}
+
+</script>
+</body>
+</html>

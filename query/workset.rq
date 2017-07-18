@@ -1,0 +1,18 @@
+#queries the workset by a an author
+select ?s ?p ?o where {{  ?s ?p ?o .
+            {{
+                select ?s where {{
+                  bind (<{0}> as ?pers) .
+                  ?pers <http://eeboo.oerc.ox.ac.uk/eeboo/hasExternalAuthorityVIAF>/^<http://eeboo.oerc.ox.ac.uk/eeboo/hasExternalAuthorityVIAF> ?s .
+                  filter(?pers != ?s) .
+                }}
+            }}
+    union {{
+select distinct ?s ?p ?o where {{
+   ?s ?a ?p .
+   ?p <http://eeboo.oerc.ox.ac.uk/eeboo/creator> {0}.
+    ?p rdfs:label ?o .
+}}
+
+}}
+}}

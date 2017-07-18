@@ -1,0 +1,16 @@
+#queries an exisitng workset. Implies that we know what this id is and the enity being seached
+select ?s ?p ?o where {{  ?s ?p ?o .
+            {{
+                select ?s where {{
+                  bind ({0} as ?pers) .
+                  ?pers <http://eeboo.oerc.ox.ac.uk/eeboo/hasExternalAuthorityVIAF>/^<http://eeboo.oerc.ox.ac.uk/eeboo/hasExternalAuthorityVIAF> ?s .
+                  filter(?pers != ?s) .
+                }}
+            }} union {{
+         select distinct ?ws ?o ?title where {{
+           {1} ?p ?o .
+          ?o <http://eeboo.oerc.ox.ac.uk/eeboo/creator> {0}.
+          ?o rdfs:label ?title .
+      }}     
+   }}
+}}
