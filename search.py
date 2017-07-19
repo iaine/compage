@@ -18,4 +18,8 @@ class SearchData():
         qry_string = qry_string.format(term)
         original = sd.run_remote_sparql(self.endpoint, qry_string)
 
-        return json.dumps({original})
+        terms  = []
+        for data in original:
+            terms.append({'id': data[0], 'values': data[1]})
+
+        return json.dumps({terms})
