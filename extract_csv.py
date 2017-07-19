@@ -10,6 +10,7 @@ import json
 
 from mock_place import MockService
 from combined import JoinGraph
+from search import SearchData
 
 app = Flask(__name__)
 
@@ -24,6 +25,14 @@ def get_single_data():
         mimetype='application/json'
     )
     return response
+
+@app.route('/search', methods=['POST', 'GET'])
+def search_data():
+    if request.method == "POST":
+        search = request.values
+        print(search)
+        data = SearchData("").search_data(search)
+        return response_template(data, 200)
 
 @app.route('/')
 def get_single():
