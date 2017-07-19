@@ -1,0 +1,35 @@
+<!doctype html>
+<head>
+<title>Search</title>
+<link rel="stylesheet" type="text/css" href="/static/wcsa.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $( function() {
+    function log( message ) {
+      $( "<div>" ).text( message ).prependTo( "#results" );
+      $( "#results" ).scrollTop( 0 );
+    }
+ 
+    $( "#semautocomplete" ).autocomplete({
+      source: "/",
+      minLength: 2,
+      select: function( event, ui ) {
+        log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+      }
+    });
+  } );
+  </sc
+</script>
+</head>
+<body>
+<div>
+   <input id="semautocomplete" />
+</div>
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+  <h3>People to search</h3>
+  <div id="results" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+  <button id="searchdata" type="button">Search data</button>
+</div>
+</body>
+</html>
