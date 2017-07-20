@@ -1,6 +1,8 @@
 '''
    Class to complete the autosearch
 '''
+from file_ops import FileOps
+from sparqldao import SparqlDao
 
 class SearchData():
 
