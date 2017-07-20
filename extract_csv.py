@@ -26,15 +26,19 @@ def get_single_data():
     )
     return response
 
-@app.route('/search', methods=['POST', 'GET'])
+@app.route('/search')
 def search_data():
-    if request.method == "POST":
-        search = request.values
-        print(search)
-        data = SearchData("").search_data(search)
-        return response_template(data, 200)
+    search = request.args.get('term')
+    #search = request.values
+    print(search)
+    data = SearchData('http://129.67.193.130:10080/blazegraph/sparql').search_data(search)
+    return response_template(data, 200)
 
 @app.route('/')
+def get_index():
+    return render_template('search.html')
+
+@app.route('/book')
 def get_single():
     return render_template('index.html')
 
