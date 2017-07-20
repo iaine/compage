@@ -69,6 +69,6 @@ class JoinGraph:
 
         terms  = []
         for data in original:
-            terms.append({'id': data[0], 'values': data[1]})
+            terms.append({'id': data[0], 'value': data[1]})
 
-        return json.dumps({terms})
+        return json.dumps(terms)
