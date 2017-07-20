@@ -14,5 +14,13 @@ class Similarities():
         setb = set(listb)
         return seta.intersection(setb) / seta.union(setb)
 
-    def cosine_similarity():
-        pass
+    def square_rooted(t):
+        if t > 0:
+            return round(sqrt(t*t),3)
+        else:
+            return 0.001
+
+   def cosine_similarity(x, y):
+       numerator = x * y
+       denominator = square_rooted(x)*square_rooted(y)
+       return round(numerator/float(denominator),3)
