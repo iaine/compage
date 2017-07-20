@@ -12,14 +12,13 @@
     }
  
     $( "#semautocomplete" ).autocomplete({
-      source: "/",
+      source: "/search",
       minLength: 2,
       select: function( event, ui ) {
         log( "Selected: " + ui.item.value + " aka " + ui.item.id );
       }
     });
   } );
-  </sc
 </script>
 </head>
 <body>
