@@ -10,7 +10,6 @@ import json
 
 from mock_place import MockService
 from combined import JoinGraph
-from search import SearchData
 
 app = Flask(__name__)
 
@@ -30,8 +29,7 @@ def get_single_data():
 def search_data():
     search = request.args.get('term')
     #search = request.values
-    print(search)
-    data = SearchData('http://129.67.193.130:10080/blazegraph/sparql').search_data(search)
+    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_data(search)
     return response_template(data, 200)
 
 @app.route('/')
