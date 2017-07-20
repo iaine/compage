@@ -23,10 +23,10 @@ class JoinGraph:
         '''
         return float(len(lista))/float(len(listb))
 
-    def get_data_list(self, searchstr):
-        qry_string = FileOps().open('query/walk_path_query.rq').format(searchstr)
+    def get_data_list(self, sparql_file, searchstr):
+        qry_string = FileOps().open(sparql_file).format(searchstr)
         data = sd.run_remote_sparql(self.endpoint, qry_string)
-        r_data = 
+        return data 
 
     def join_graphs(self, graph):
         merged_data = []
