@@ -1,5 +1,5 @@
 /**
-*  Worker to get possible matches for a stemmed word: e.g. language
+*  Queries the endpoint to return the predicate weightings and ways of thinking about a term
 */
 onmessage = function(e) {
   var workerResult;
@@ -7,14 +7,16 @@ onmessage = function(e) {
   //set up the main call for the data to parse. 
   function sparqlListener () {
     workerResult = JSON.parse(this.responseText);
+    console.log(workerResult);
+    postMessage(workerResult);
   }
 
   var oReq = new XMLHttpRequest();
-  oReq.open("POST", "/geo", true);
+  oReq.open("POST", "/sparql", true);
   oReq.addEventListener("load", sparqlListener);
   oReq.setRequestHeader("Content-type", "application/json");
-  oReq.send(JSON.stringify({'term': e.data[0]}));
+  oReq.send(JSON.stringify({'entity': e.data[0]}));
 
-  console.log('Posting message back to main script');
-  postMessage(workerResult);
+  /*console.log('Posting message back to main script');
+  postMessage(workerResult);*/
 }
