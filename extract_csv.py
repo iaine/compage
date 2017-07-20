@@ -13,7 +13,7 @@ from combined import JoinGraph
 
 app = Flask(__name__)
 
-@app.route('/data')
+@app.route('/data', methods=['POST'])
 def get_single_data():
     #change this Arnaud in JS
     text = pd.read_csv('/home/iain/git/Texts/TCP.csv')
@@ -28,7 +28,6 @@ def get_single_data():
 @app.route('/search')
 def search_data():
     search = request.args.get('term')
-    #search = request.values
     data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_data(search)
     return response_template(data, 200)
 
@@ -50,21 +49,14 @@ def stem():
     #write function to search the turtle for languages that have the stem in it. 
     return response
 
-@app.route('/geo', methods=['POST'])
+@app.route('/sparql', methods=['POST'])
 def sparql():
     '''
        Code to stem the words. 
     '''
-    term = request.get_json()
-    _term = MockService('place').run_query(term["term"])
-    print _term
-    #write function to search the turtle for languages that have the stem in it. 
-    response = app.response_class(
-        response=json.dumps({'linked':_term}),
-        status=200,
-        mimetype='application/json'
-    )
-    return response
+    graph = request.get_json()
+    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_predicates(graph['entity'])
+    return response_template(data, 200)
 
 @app.route('/distance', methods=['POST'])
 def distance():
