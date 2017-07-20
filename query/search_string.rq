@@ -1,5 +1,5 @@
 #search for substring. Used in autocomplete
 select ?s ?o where {{
    ?s rdfs:label ?o .
-   filter (regex(?o, "{0}", "i")) .
+   filter (regex(?o, "^{0}", "i")) .
 }} LIMIT 10
