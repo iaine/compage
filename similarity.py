@@ -20,7 +20,7 @@ class Similarities():
         else:
             return 0.001
 
-   def cosine_similarity(x, y):
-       numerator = x * y
-       denominator = square_rooted(x)*square_rooted(y)
-       return round(numerator/float(denominator),3)
+    def cosine_similarity(x, y):
+        numerator = x * y
+        denominator = square_rooted(x)*square_rooted(y)
+        return round(numerator/float(denominator),3)
