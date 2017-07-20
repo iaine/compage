@@ -5,6 +5,7 @@ import json
 
 from sparqldao import SparqlDao
 from file_ops import FileOps
+from similarity import Similarities
 
 class JoinGraph:
 
@@ -72,3 +73,22 @@ class JoinGraph:
             terms.append({'id': data[0], 'value': data[1]})
 
         return json.dumps(terms)
+
+    def search_predicates(self, searchterm):
+        '''
+          Find predicates associated with an object. 
+        '''
+        original = []
+        sd = SparqlDao()
+        simil = Similarities()
+
+        qry_string = FileOps().open('query/search_predicates.rq')
+        qry_string = qry_string.format(term)
+        original = sd.run_remote_sparql(self.endpoint, qry_string)
+        
+        props = defaultdict(int)
+        all_docs = 0
+        for merge in original:
+            props[merge[1]] += 1
+            
+        return json.dumps(props)
