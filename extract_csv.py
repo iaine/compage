@@ -70,7 +70,7 @@ def distance():
     return response
 
 @app.route('/subject', methods=['GET', 'POST'])
-def get_linked_graphs():
+def get_linked_subjects():
     graph = request.get_json()
     data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_subject(graph['subject'])
     return response_template(data, 200)
