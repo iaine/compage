@@ -24,12 +24,21 @@ var links = document.getElementById('links')
 
 var linksWorker= new Worker('/static/links.js')
 
-//set up the workers and handle the return message
-var langWorker = new Worker('/static/stem.js');
+//Worker to fetch the subjects per predicate
+var langWorker = new Worker('/static/subject.js');
 langWorker.onmessage = function(e) {
-  lang.textContent = e.data;
+  lang.innerHTML = showSubjects(e.data);
 }
 
+//subjects listing
+function showSubjects(data) {
+    html = "<div id='subjects'><ul>";
+    data.map( function(x) { html += "<li>" + x + "</li>"  } );
+    html += "</ul></div>";
+    return html;
+}
+
+//Worker to get the predicates
 var sparqlWorker = new Worker('/static/sparql.js');
 sparqlWorker.onmessage = function(e) {
   sparql.innerHTML = showPredicateWeightings(e.data);
@@ -38,11 +47,14 @@ sparqlWorker.onmessage = function(e) {
 // show the predicate weightings in a simple list for now
 function showPredicateWeightings(data) {
     html = "<div id='weightings'>";
-    data.map( function(x) { html += "<div>" + x.predicate + " : " + x.weight + "%</div>"  } );
+    data.map( function(x) { 
+        html += "<div onclick=\"associateSubject('"+x.predicate+"')\">" + x.predicate + " : " + x.weight + "%</div>";  
+    } );
     html += "</div>";
     return html;
 }
 
+//Worker to build the relevance or not. 
 linksWorker.onmessage = function(e) {
   links.innerHTML = toHtml(e.data);
 }
@@ -126,6 +138,13 @@ function editDistance(string_a, string_b) {
     console.log('posting message to worker');
 }
 
+/**
+*  Make into a webworker and call Python
+*/
+function associateSubject(uri) {
+    langWorker.postMessage([uri]);
+    console.log('posting message to worker');
+}
 /**
 *  Make into a webworker and call Python
 */
