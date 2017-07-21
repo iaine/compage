@@ -32,7 +32,7 @@ langWorker.onmessage = function(e) {
 
 var sparqlWorker = new Worker('/static/sparql.js');
 sparqlWorker.onmessage = function(e) {
-  sparql.textContent = showPredicateWeightings(e.data);
+  sparql.innerHTML = showPredicateWeightings(e.data);
 }
 
 // show the predicate weightings in a simple list for now
