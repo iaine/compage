@@ -11,7 +11,7 @@ onmessage = function(e) {
   }
 
   var oReq = new XMLHttpRequest();
-  oReq.open("POST", "/stem", true);
+  oReq.open("POST", "/subject", true);
   oReq.addEventListener("load", stemListener);
   oReq.setRequestHeader("Content-type", "application/json");
   oReq.send({'subject': e.data[0]});
