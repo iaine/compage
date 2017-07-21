@@ -188,8 +188,8 @@ function simpleMarkup(data, divname) {
 
 function createForm(originalUrl, linkedUrl, divname) {
     html = "<div id='" + divname + "'>";
-    html += "<div onclick=\"updateWeighting('"+originalUrl+"', '"+linkedUrl+"', 1)\">Agree</div>";
-    html += "<div onclick=\"updateWeighting('"+originalUrl+"', '"+linkedUrl+"', 0)\">Disagree</div>";
+    html += "<div onclick=\"updateWeighting('"+originalUrl+"', '"+linkedUrl+"', 1)\">Interested</div>";
+    html += "<div onclick=\"updateWeighting('"+originalUrl+"', '"+linkedUrl+"', 0)\">Not interested</div>";
     html += "</div>";
     return html;
 }

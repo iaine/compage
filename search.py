@@ -18,7 +18,7 @@ class SearchData():
 
         qry_string = FileOps().open('query/search_string.rq')
         qry_string = qry_string.format(term)
-        original = sd.run_remote_sparql(self.endpoint, qry_string)
+        original = sd.autocomplete_sparql(self.endpoint, qry_string)
 
         terms  = []
         for data in original:
