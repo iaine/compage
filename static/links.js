@@ -1,12 +1,13 @@
 /**
 *  Worker to get possible matches from linked graphs
 */
+
+
 onmessage = function(e) {
-  var workerResult;
   console.log('Message received from main script');
   //set up the main call for the data to parse. 
   function semanticListener () {
-    workerResult = toHtml(JSON.parse(this.responseText));
+    var workerResult = JSON.parse(this.responseText);
     postMessage(workerResult);
   }
 
@@ -16,7 +17,7 @@ onmessage = function(e) {
   oReq.setRequestHeader("Content-type", "application/json");
   oReq.send(JSON.stringify({'graph': e.data[0]}));
 }
-
+//@todo: Refactor this to be cleaner
 //wrapper function to parse the JSON into HTML 
 function toHtml(data) {
    markup = "";
@@ -26,6 +27,7 @@ function toHtml(data) {
    //hide similarity for moment
    //markup += simpleMarkup(data.similarity, "similarity");
    markup += createForm(data.original[0][0], data.difference[0][0], "form");
+   markup += createObjectLists(data);
    return markup;
 }
 
@@ -48,4 +50,22 @@ function createForm(originalUrl, linkedUrl, divname) {
     html += "<div onclick=\"updateWeighting('"+originalUrl+"', '"+linkedUrl+"', 0)\">Disagree</div>";
     html += "</div>";
     return html;
+}
+
+var objectSet = new Set();
+
+function createObjectLists(data) {
+   listObjects(data);
+   html = "<div id=\"objectlist\">";
+   objectSet.forEach( function(x) { html += "<div onclick=\"findPredicates('"+ x +"')\">" + x + "</div> ";  } ); 
+   html += "</div>";
+   return html;  
+}
+
+//filter the data to recover all objects
+function listObjects(data) {
+    parts = [data.original, data.difference, data.link];
+    for (d in parts) {
+       parts[d].filter(function(x) {objectSet.add(x[2])});
+    }
 }
