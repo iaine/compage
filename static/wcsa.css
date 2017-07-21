@@ -20,3 +20,38 @@
 #difference {
    background-color: #F08080;
 }
+
+/* autocomplete styling */
+#semautocomplete {
+   margin: auto;
+   border-radius: 5%;
+   height: 5%;
+}
+#results {
+   margin: auto;
+   height: 20%; 
+   width: 50%;
+   overflow: auto;
+}
+
+.ui-widget {
+   margin: auto;
+   font: 1.0em arial, sans-serif;
+}
+
+h3 {
+   margin:auto;
+}
+
+.ui-autocomplete {
+   list-style: none;
+   background-color: #F0F8FF;
+   width: 10%;
+   border-radius: 10%;
+}
+
+.ui-menu .ui-menu-item a{
+    color: #96f226;
+    border-radius: 0px;
+    border: 1px solid #454545;
+}
