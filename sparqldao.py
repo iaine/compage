@@ -38,3 +38,19 @@ class SparqlDao:
         data = [(r["s"]["value"], r["o"]["value"]) for r in results["results"]["bindings"]]
 
         return data
+
+    def list_sparql(self,endpoint, query):
+        '''
+           Method for return a single list
+        '''
+        data = []
+
+        sparql = SPARQLWrapper(endpoint)
+
+        sparql.setQuery(query)
+        sparql.setReturnFormat(JSON)
+        results = sparql.query().convert()
+
+        data = [(r["s"]["value"]) for r in results["results"]["bindings"]]
+
+        return data
