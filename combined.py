@@ -75,6 +75,21 @@ class JoinGraph:
 
         return json.dumps(terms)
 
+    def search_subject(self, searchterm):
+        '''
+          Find subjects associated with a predicate
+          @todo: put this into named graph with time. 
+          @todo: filter this for workset or non-workset. 
+        '''
+        original = []
+        sd = SparqlDao()
+
+        qry_string = FileOps().open('query/search_subjects.rq')
+        qry_string = qry_string.format('<'+searchterm+'>')
+
+        original = sd.autocomplete_sparql(self.endpoint, qry_string)
+        return json.dumps(original)
+
     def search_predicates(self, searchterm):
         '''
           Find predicates associated with an object and calculates the weightings
@@ -92,7 +107,7 @@ class JoinGraph:
             qry_string = FileOps().open('query/search_predicates_literal.rq')
             qry_string = qry_string.format('"'+searchterm+'"')
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
-        
+
         count = 0
         preds = []
         for orig in original:
@@ -100,7 +115,7 @@ class JoinGraph:
 
         for data in original:
             preds.append({ "predicate": data[1], "weight": self._calculate_weight(data[0], count)})
-            
+
         return json.dumps(preds)
 
     def _calculate_weight(self, weight, count):
