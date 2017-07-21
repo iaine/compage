@@ -87,7 +87,7 @@ class JoinGraph:
         qry_string = FileOps().open('query/search_subjects.rq')
         qry_string = qry_string.format('<'+searchterm+'>')
 
-        original = sd.autocomplete_sparql(self.endpoint, qry_string)
+        original = sd.list_sparql(self.endpoint, qry_string)
         return json.dumps(original)
 
     def search_predicates(self, searchterm):

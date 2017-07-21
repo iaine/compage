@@ -14,5 +14,5 @@ onmessage = function(e) {
   oReq.open("POST", "/subject", true);
   oReq.addEventListener("load", stemListener);
   oReq.setRequestHeader("Content-type", "application/json");
-  oReq.send({'subject': e.data[0]});
+  oReq.send(JSON.stringify({'subject': e.data[0]}));
 }
