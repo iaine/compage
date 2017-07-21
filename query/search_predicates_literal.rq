@@ -1,0 +1,7 @@
+#search for the predicates for the object
+
+select (count(?o) as ?s) ?o where {{
+   ?s ?o ?p1 .
+   filter(isLiteral(?p1)) .
+   filter(str(?p1) = {0}) .
+}} group by ?o
