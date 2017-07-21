@@ -99,6 +99,12 @@ class JoinGraph:
             count += int(orig[0])
 
         for data in original:
-            preds.append({ "predicate": data[1], "weight": round(((float(data[0])/count) * 100), 2)})
+            preds.append({ "predicate": data[1], "weight": self._calculate_weight(data[0], count)})
             
         return json.dumps(preds)
+
+    def _calculate_weight(self, weight, count):
+        if weight is None or weight < 1:
+            return 0
+        
+        return round(((float(weight)/count) * 100), 2)
