@@ -6,6 +6,7 @@ import json
 from sparqldao import SparqlDao
 from file_ops import FileOps
 from similarity import Similarities
+from collections import defaultdict
 
 class JoinGraph:
 
@@ -76,19 +77,28 @@ class JoinGraph:
 
     def search_predicates(self, searchterm):
         '''
-          Find predicates associated with an object. 
+          Find predicates associated with an object and calculates the weightings
+          @todo: put this into named graph with time. 
+          @todo: filter this for workset or non-workset. 
         '''
         original = []
         sd = SparqlDao()
         simil = Similarities()
 
-        qry_string = FileOps().open('query/search_predicates.rq')
-        qry_string = qry_string.format(term)
-        original = sd.run_remote_sparql(self.endpoint, qry_string)
+        if "http" in searchterm:
+            qry_string = FileOps().open('query/search_predicates_uri.rq')
+            qry_string = qry_string.format('<'+searchterm+'>')
+        else:
+            qry_string = FileOps().open('query/search_predicates_literal.rq')
+            qry_string = qry_string.format('"'+searchterm+'"')
+        original = sd.autocomplete_sparql(self.endpoint, qry_string)
         
-        props = defaultdict(int)
-        all_docs = 0
-        for merge in original:
-            props[merge[1]] += 1
+        count = 0
+        preds = []
+        for orig in original:
+            count += int(orig[0])
+
+        for data in original:
+            preds.append({ "predicate": data[1], "weight": round(((float(data[0])/count) * 100), 2)})
             
-        return json.dumps(props)
+        return json.dumps(preds)
