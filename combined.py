@@ -1,5 +1,5 @@
 '''
-   Create two named graph
+   Fetch graph structure from db and put into json
 '''
 import json
 
@@ -123,3 +123,21 @@ class JoinGraph:
             return 0
         
         return round(((float(weight)/count) * 100), 2)
+
+    def get_original(self, graphs):
+        '''
+          Gets the base graphs for the request
+        '''
+        original = []
+        sd = SparqlDao()
+        searchterm = ''
+        for g in graphs:
+            searchterm += '<' + str(g) + '>'
+
+        qry_string = FileOps().open('query/original_author.rq')
+        qry_string = qry_string.format(searchterm)
+
+
+        original = sd.run_remote_sparql(self.endpoint, qry_string)
+        return json.dumps(original)
+        #return original
