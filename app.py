@@ -1,29 +1,20 @@
 '''
-   File to parse the EEBO CSV and create a dummy JSON object for
-   prototyping
+   Routing for the data
 '''
-import pandas as pd
-from stemming.porter2 import stem
-from difflib import SequenceMatcher
+
 from flask import Flask, request, redirect, url_for, render_template, flash, json
 import json
 
-from mock_place import MockService
 from combined import JoinGraph
 
 app = Flask(__name__)
 
 @app.route('/data', methods=['POST'])
 def get_single_data():
-    #change this Arnaud in JS
-    text = pd.read_csv('/home/iain/git/Texts/TCP.csv')
-    text = text.loc[text['Author'].str.contains("Lindanus, Guilelmus Damasus",na=False)]
-    response = app.response_class(
-        response=text.to_json(orient='records'),
-        status=200,
-        mimetype='application/json'
-    )
-    return response
+   
+    graph = request.get_json()
+    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').get_original(graph['data'])
+    return response_template(data, 200)
 
 @app.route('/search')
 def search_data():
@@ -39,35 +30,14 @@ def get_index():
 def get_single():
     return render_template('index.html')
 
-@app.route('/stem', methods=['POST'])
-def stem():
-    '''
-       Code to stem the words. 
-    '''
-    term = request.get_json()
-    _term = stem(term)
-    #write function to search the turtle for languages that have the stem in it. 
-    return response
-
 @app.route('/sparql', methods=['POST'])
 def sparql():
     '''
-       Code to stem the words. 
+       Searches the predicates associated with an object
     '''
     graph = request.get_json()
     data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_predicates(graph['entity'])
     return response_template(data, 200)
-
-@app.route('/distance', methods=['POST'])
-def distance():
-    terms = request.get_json()
-    match = SequenceMatcher(None, terms["a"], terms["b"])
-    response = app.response_class(
-        response=json.dumps({'result': str(match.ratio())}),
-        status=200,
-        mimetype='application/json'
-    )
-    return response
 
 @app.route('/subject', methods=['GET', 'POST'])
 def get_linked_subjects():
