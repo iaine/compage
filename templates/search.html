@@ -6,23 +6,39 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
     var semdata = [];
-    $( function() {
-    function log( message ) {
-      $( "<div>" ).text( message ).prependTo( "#results" );
+    function log() {
+      semdata.forEach(function(message) { $( "#results" ).html( message.value + "<button onclick='remove(\""+message.id+"\")'>Remove</button>" ).prependTo( "#results" )});
       $( "#results" ).scrollTop( 0 );
     }
+    $( function() {
+    /*function log() {
+      semdata.forEach(function(message) { $( "#results" ).html( message.value + "<button onclick='remove(\""+message.id+"\")'>Remove</button>" ).prependTo( "#results" )});
+      $( "#results" ).scrollTop( 0 );
+    }*/
  
     $( "#semautocomplete" ).autocomplete({
       source: "/search",
-      minLength: 2,
+      minLength: 3,
       select: function( event, ui ) {
-        //collect the ids to post back later
-        semdata.push(ui.item.id);
-        console.log(semdata);
-        log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+        createDataObject(ui.item.value, ui.item.id);
+        //log();
       }
     });
   } );
+
+  function remove(entity) {
+    console.log("Remove" + entity);
+    return semdata.filter( function(en) { return en.id != entity; });
+  }
+  
+  /**
+  *  Function to create the data object
+  */
+  function createDataObject(name, id) {
+     semdata.push({'id': id, 'value': name});
+     console.log(semdata);
+     log();
+  }
 </script>
 </head>
 <body>
@@ -33,11 +49,99 @@
   <div id="results"></div>
 </div>
 <button id="searchdata" type="button">Search data</button>
+<div id="data">
+</div>
+<div id="datum">
+  <div id="searchobjects"></div>
+  <div id="preds"></div>
+</div>
+<div id="extradatum">
+  <div id="subject" />
+</div>
 <script>
+//Worker to get the data
+var datum = document.getElementById('data');
+var objs = document.getElementById('searchobjects');
+var sparql = document.getElementById('preds');
+var lang = document.getElementById('subject')
+
+var datumWorker = new Worker('/static/data.js');
+datumWorker.onmessage = function(e) {
+  datum.innerHTML = parseDifference(e.data);
+  objs.innerHTML = createObjectLists(e.data);
+}
+
+function parseDifference(difference, divname) {
+   html = "<div id='"+divname+"'><ul>";
+   difference.map(
+        function (x) { html += "<li>" + x[1] + " : " + x[2] + "</li>"; }
+   );
+   html += "</ul></div>";
+   return html;
+}
+
+  //find objects code
+  var objectSet = new Set();
+  function createObjectLists(data) {
+   listObjects(data);
+   html = "<div id=\"objectlist\">";
+   objectSet.forEach( function(x) { html += "<div onclick=\"findPredicates('"+ x +"')\">" + x + "</div> ";  } );
+   html += "</div>";
+   return html;
+  }
+
+  //filter the data to recover all objects
+  function listObjects(data) {
+    data.filter(function(x) {objectSet.add(x[2])});
+  }
+
+  function findPredicates(uriA) {
+    sparqlWorker.postMessage([uriA]);
+  }
+
+  //Worker to fetch the subjects per predicate
+  var langWorker = new Worker('/static/subject.js');
+    langWorker.onmessage = function(e) {
+    lang.innerHTML = showSubjects(e.data);
+  }
+
+  //subjects listing
+  function showSubjects(data) {
+    html = "<div id='subjects'><ul>";
+    data.map( function(x) { html += "<li onclick='createDataObject(\""+x+"\", \""+x+"\")'>" + x + "</li>"  } );
+    html += "</ul></div>";
+    return html;
+  }
+
+  //Worker to get the predicates
+  var sparqlWorker = new Worker('/static/sparql.js');
+    sparqlWorker.onmessage = function(e) {
+    sparql.innerHTML = showPredicateWeightings(e.data);
+  }
+
+  // show the predicate weightings in a simple list for now
+  function showPredicateWeightings(data) {
+    html = "<div id='weightings'>";
+    data.map( function(x) { 
+        html += "<div onclick=\"associateSubject('"+x.predicate+"')\">" + x.predicate + " : " + x.weight + "%</div>";  
+    } );
+    html += "</div>";
+    return html;
+  }
+
+  /**
+  *  Associate a subject to a predicate and search knowledge base
+  */
+  function associateSubject(uri) {
+    langWorker.postMessage([uri]);
+    console.log('posting message to worker');
+  }
+
   //script to send data to server
   $("button").click(function() {
-    console.log('Pressing button');
-    $.post('/data',  {data: semdata})
+    var searchData = Array();
+    semdata.forEach(function (d) { searchData.push(d.id);  } );
+    datumWorker.postMessage(searchData);
   });
 </script>
 </body>
