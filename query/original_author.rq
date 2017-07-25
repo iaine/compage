@@ -1,4 +1,5 @@
 #get the graph for an entity
 select ?s ?p ?o where {{
-             bind (<{0}> as ?s) .
-             ?s ?p ?o  }}
+     ?s ?p ?o  .
+     VALUES ?s {{ {0} }}
+}}
