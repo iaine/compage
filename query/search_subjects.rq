@@ -1,0 +1,4 @@
+#searching for subjects we may need to limit
+select ?s where {{
+    ?s {0} ?o .
+}}
