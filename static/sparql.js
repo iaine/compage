@@ -7,7 +7,6 @@ onmessage = function(e) {
   //set up the main call for the data to parse. 
   function sparqlListener () {
     workerResult = JSON.parse(this.responseText);
-    console.log(workerResult);
     postMessage(workerResult);
   }
 
