@@ -1,6 +1,6 @@
 <!doctype html>
 <head>
-<title>WCSA+DC</title>
+<title>WCSA+DC and Cousin It</title>
 <link rel="stylesheet" type="text/css" href="/static/wcsa.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -30,14 +30,16 @@
 
   function remove(entity) {
     console.log("Remove" + entity);
-    return semdata.filter( function(en) { return en.id != entity; });
+    semdata = semdata.filter( function(en) { return en.id != entity; });
+    console.log(semdata);
+    log();
   }
   
   /**
   *  Function to create the data object
   */
   function createDataObject(name, id) {
-     semdata.push({'id': id, 'value': name});
+     semdata.push({'id': id, 'value': name, 'data':[] });
      console.log(semdata);
      log();
   }
@@ -45,9 +47,7 @@
 </head>
 <body>
 <div class="ui-widget">
-   <input id="semautocomplete" />
-</div>
-<div class="ui-widget">
+  <input id="semautocomplete" />
   <div id="results"></div>
 </div>
 <button id="searchdata" type="button">Search data</button>
