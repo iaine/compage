@@ -1,13 +1,15 @@
 <!doctype html>
 <head>
-<title>Search</title>
+<title>WCSA+DC</title>
 <link rel="stylesheet" type="text/css" href="/static/wcsa.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
     var semdata = [];
     function log() {
-      semdata.forEach(function(message) { $( "#results" ).html( message.value + "<button onclick='remove(\""+message.id+"\")'>Remove</button>" ).prependTo( "#results" )});
+      var _html = '';
+      semdata.forEach( function(message) { _html += message.value + "<button onclick='remove(\""+message.id+"\")'>Remove</button>"});
+      $( "#results" ).html(_html).prependTo( "#results" );
       $( "#results" ).scrollTop( 0 );
     }
     $( function() {
