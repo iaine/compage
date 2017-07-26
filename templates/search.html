@@ -8,22 +8,17 @@
     var semdata = [];
     function log() {
       var _html = '';
-      semdata.forEach( function(message) { _html += '<div>' + message.value + "<button onclick='remove(\""+message.id+"\")'>Remove</button></div>"});
+      semdata.forEach( function(message) { _html += '<div>' + message.value + "<input type=\"button\" class=\"removebutton\" onclick='remove(\""+message.id+"\")' value=\"Remove\"></div>"});
       $( "#results" ).html(_html).prependTo( "#results" );
       $( "#results" ).scrollTop( 0 );
     }
     $( function() {
-    /*function log() {
-      semdata.forEach(function(message) { $( "#results" ).html( message.value + "<button onclick='remove(\""+message.id+"\")'>Remove</button>" ).prependTo( "#results" )});
-      $( "#results" ).scrollTop( 0 );
-    }*/
  
     $( "#semautocomplete" ).autocomplete({
       source: "/search",
       minLength: 3,
       select: function( event, ui ) {
         createDataObject(ui.item.value, ui.item.id);
-        //log();
       }
     });
   } );
@@ -43,6 +38,20 @@
      console.log(semdata);
      log();
   }
+
+  function pushData (data) {
+     data.forEach( function(d) { addDataToObject(d[0],d[1],d[2]);  } );
+  }
+  /**
+  *  Function to add item to object
+  */
+  function addDataToObject(entity, pred, obj) {
+      semdata.filter( 
+         function (d) { if (d.id == entity) { 
+            d.data.push({'p' : pred, 'o': obj }); 
+         } 
+      });
+  }
 </script>
 </head>
 <body>
@@ -50,7 +59,7 @@
   <input id="semautocomplete" />
   <div id="results"></div>
 </div>
-<button id="searchdata" type="button">Search data</button>
+<input class="searchbutton" type="button" value="Search Data" />
 <div id="data">
 </div>
 <div id="datum">
@@ -69,14 +78,26 @@ var lang = document.getElementById('subject')
 
 var datumWorker = new Worker('/static/data.js');
 datumWorker.onmessage = function(e) {
-  datum.innerHTML = parseDifference(e.data);
-  objs.innerHTML = createObjectLists(e.data);
+  pushData(e.data);
+  datum.innerHTML = "";
+  datum.innerHTML = createDataList(semdata, "id-data");
+  objs.innerHTML = createObjectLists(semdata);
 }
 
-function parseDifference(difference, divname) {
-   html = "<div id='"+divname+"'><ul>";
-   difference.map(
-        function (x) { html += "<li>" + x[1] + " : " + x[2] + "</li>"; }
+/**
+*  Function to create a list per data object of preds : objs
+*/
+function createDataList(data, div) {
+    var markup = '';
+    data.forEach(function(x) { markup = markUpList(x, div, markup); });
+    return markup;
+}
+
+function markUpList(difference, divname, html) {
+   html += "<div id='"+divname+"'><ul>";
+   html += "<h3>" + difference.value + "</h3>";
+   difference.data.map(
+        function (x) { html += "<li>" + x.p + " : " + x.o + "</li>"; } 
    );
    html += "</ul></div>";
    return html;
@@ -89,12 +110,16 @@ function parseDifference(difference, divname) {
    html = "<div id=\"objectlist\">";
    objectSet.forEach( function(x) { html += "<div onclick=\"findPredicates('"+ x +"')\">" + x + "</div> ";  } );
    html += "</div>";
+   console.log(objectSet);
    return html;
   }
 
   //filter the data to recover all objects
   function listObjects(data) {
-    data.filter(function(x) {objectSet.add(x[2])});
+    //data.filter(function(x) {objectSet.add(x[2])});
+    data.forEach( 
+       function(d) { d.data.forEach(function(x) { objectSet.add(x.o);  }); }
+    );
   }
 
   function findPredicates(uriA) {
@@ -140,7 +165,7 @@ function parseDifference(difference, divname) {
   }
 
   //script to send data to server
-  $("button").click(function() {
+  $(".searchbutton").click(function() {
     var searchData = Array();
     semdata.forEach(function (d) { searchData.push(d.id);  } );
     datumWorker.postMessage(searchData);

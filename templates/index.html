@@ -2,12 +2,19 @@
 <head>
 <title>Data</title>
 <link rel="stylesheet" type="text/css" href="/static/wcsa.css">
-<script src="https://unpkg.com/compromise@latest/builds/compromise.min.js"></script>
 <script src="/static/edit.js"></script>
 <script src="/static/stem.js"></script>
 </head>
 <body>
-<div id="entity">Arnauld Antoine,1560-1619<div id="ws"onclick="getLinks('http://eeboo.oerc.ox.ac.uk/eeboo/Arnauld_Antoine_1560-1619');">Search Workset</div><div id="data_all" onclick="getLinks('http://eeboo.oerc.ox.ac.uk/eeboo/Arnauld_Antoine_1560-1619');">Search All</div></div>
+{% for entity in entities %}
+<div id="entity">{{ entity[0][0] }}
+  <p>{{ entity[1] }} : {{ entity[2] }}</p>
+  <div id="ws"onclick="getLinks('{{ entity[0][0] }}');">Search Workset</div>
+  <div id="data_all" onclick="getLinks("{{ entity[0][0] }}");">Search Other Worksets</div>
+  <div id="ws"onclick="getLinks('{{ entity[0][0] }}');">Search All</div>
+</div>
+{% endfor %}
+
 <p id="log"/>
 <div id="edit"></div>
 <div id="lang"></div>
@@ -91,43 +98,6 @@ oReq.send();*/
 function log(msg) {
   var p = document.getElementById('log');
   p.innerHTML = p.innerHTML + "<br />" + msg;
-}
-
-function parseName(data) {
-  var names = nlp(data);
-  if (data.indexOf(';') > 0) {
-     var auth = data.split(';');
-     log("<br />Author Names " + auth.join('<br />'))
-  } else {
-     log("<br />Names <br />" + names.people().out('list'));
-  }
-}
-
-function parseData(data) {
-    var html = "<br />";
-    for (var d in data) {
-        if (data.hasOwnProperty(d)) {
-          log(html.concat(d + " : " + data[d] + "<br />"));
-        }
-    }
-    log("Data <br />" + html);
-}
-
-function parseTopics(d) {
-   var topic = nlp(d);
-   log("<br />Topics: " + topic.topics().out('list'));
-}
-
-function parseSubjects(data) {
-  if (data.indexOf('--') > 0) {
-     var auth = data.split('--');
-     log("<br />Subjects " + auth.join('<br />'))
-  }
-}
-
-function parseTranslation(d) {
-   var trans = nlp(d);
-   log("<p>Translation: " + trans.match('translated into #Noun by #Noun #Noun').out('text')+"<p>");
 }
 
 /**
