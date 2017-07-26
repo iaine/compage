@@ -8,7 +8,7 @@
     var semdata = [];
     function log() {
       var _html = '';
-      semdata.forEach( function(message) { _html += message.value + "<button onclick='remove(\""+message.id+"\")'>Remove</button>"});
+      semdata.forEach( function(message) { _html += '<div>' + message.value + "<button onclick='remove(\""+message.id+"\")'>Remove</button></div>"});
       $( "#results" ).html(_html).prependTo( "#results" );
       $( "#results" ).scrollTop( 0 );
     }
