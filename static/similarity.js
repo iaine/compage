@@ -1,29 +1,60 @@
 /**
-* Class to encapsulate the similarity algorithm
+* Module to encapsulate the similarity algorithm
 */
+var setOperations;
 
-class Similarity {
-  //flooding algorithms
-  similarity = Array()
-  compare(dataObject) {
-     //calculate the similarity scores for each object in the LD object
-     existingQuery = set();
-     dataObject.forEach(function(d)  {
-         //add to existing query
-         existingQuery.add(d.id);
-         dataObject.forEach( function(d1)  {
-             //don't search searched objects
-             if (d1.id != d.id) {
-                 if (d1.length > d.length) {
-                     d1.data.forEach( compareObjects(x, d.data);)
-                 }
-             }
-         });
-     }
-  }
+setOperations = {
 
-  compareObjects(x, y) {
-    //check if x is in Array y
-    return y.filter(return (y.p == x.p && y.o == x.o) ? 1 : 0;);
-  }
+  /**
+  *  Method to provide the set union of a list of sets
+  */
+  calculateSetUnion: function(listOfSets) {
+      var _tmp = new Set();
+      listOfSets.forEach( function(y) {
+          for (var i of y) {
+             _tmp.add(i);
+          }
+      });
+      return _tmp;
+    },
+
+  /**
+  *  Method to work out the intersection between two sets. 
+  */
+  calculateSetIntersect: function(setA, setB) {
+      var _tmp = new Set();
+      //check if x is in Array y
+      for (var i of setB) {
+          if(setA.has(i)) {
+            _tmp.add(i);
+          }
+      }
+      return _tmp;
+    },
+
+    /**
+    *  Method to get the set difference between set x and set y
+    *
+    */
+  calculateSetDifference: function(setA, setB) {
+      var _tmp = new Set();
+      for (var i of setB) {
+          if(!setA.has(i)) {
+              _tmp.add(i);
+          }
+      }
+      return _tmp;
+    },
+  
+   /**
+   *  Method to calculate the Jaccard similarity
+   */
+   jaccardSimilarity: function(setA, setB) {
+     var intersect = this.calculateSetIntersect(setA, setB);
+     var union = this.calculateSetUnion([setA, setB]);  
+     return parseFloat(intersect.size / union.size);
+   }
 }
+
+module.exports = setOperations;
+
