@@ -22,7 +22,11 @@
       }
     });
   } );
-
+  
+  /**
+  *  Method to remove an entity based on the id
+  *  @param{string} entity
+  */
   function remove(entity) {
     console.log("Remove" + entity);
     semdata = semdata.filter( function(en) { return en.id != entity; });
@@ -31,26 +35,51 @@
   }
   
   /**
-  *  Function to create the data object
+  *  Method to add an entity to the JSON object
   */
   function createDataObject(name, id) {
-     semdata.push({'id': id, 'value': name, 'data':[] });
-     console.log(semdata);
+     semdata.push({'id': id, 'value': name, 'data': new Set() });
      log();
   }
 
+  /**
+  *  Method of pushing many entities into the data object
+  *  @param{array} data
+  */
   function pushData (data) {
      data.forEach( function(d) { addDataToObject(d[0],d[1],d[2]);  } );
   }
   /**
-  *  Function to add item to object
+  *  Method to update an entity in the object with data
+  *  @param{string} entity
+  *  @param{string} pred
+  *  @param{string} obj
   */
   function addDataToObject(entity, pred, obj) {
       semdata.filter( 
-         function (d) { if (d.id == entity) { 
-            d.data.push({'p' : pred, 'o': obj }); 
+         function (d) { if (d.id == entity) {
+            //check for existence of data in entity.data 
+            if (d.data.size > 1) {
+                console.log(obj + ' data: ' + checkDataExistence(d.data, pred, obj));
+                d.data.add({'p' : pred, 'o': obj });
+            } else {
+                d.data.add({'p' : pred, 'o': obj });
+            }
          } 
       });
+  }
+
+  /**
+  * Method to check for the existence of (pred, obj) pair in data
+  *
+  */
+  function checkDataExistence(dataObj, prede, obje) {
+      var inObj = new Set()
+      inObj = dataObj.forEach( function(y) {
+          console.log(obje + " : " + y.o);
+          if (y.p === prede){ if (y.o === obje) { console.log('o' + y.o + 'p' + y.p); return y; } }
+      });
+      return inObj;
   }
 </script>
 </head>
@@ -96,7 +125,7 @@ function createDataList(data, div) {
 function markUpList(difference, divname, html) {
    html += "<div id='"+divname+"'><ul>";
    html += "<h3>" + difference.value + "</h3>";
-   difference.data.map(
+   difference.data.forEach(
         function (x) { html += "<li>" + x.p + " : " + x.o + "</li>"; } 
    );
    html += "</ul></div>";
@@ -161,7 +190,6 @@ function markUpList(difference, divname, html) {
   */
   function associateSubject(uri) {
     langWorker.postMessage([uri]);
-    console.log('posting message to worker');
   }
 
   //script to send data to server
