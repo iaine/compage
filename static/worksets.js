@@ -11,9 +11,8 @@ var workset = {
   *  Adds an id to the Set of worksets
   */
   addid: function(workset, worksetid) {
-    var _tmp = new Set(workset);
-    _tmp.add(worksetid);
-    return _tmp;
+    workset.add(worksetid);
+    return workset;
   },
 
   /**
@@ -22,7 +21,7 @@ var workset = {
   filterid: function(work, worksetid) {
      for (var ids of worksetid) {
          console.log(ids);
-         work.add(ids);
+         work.delete(ids);
      }
      return work;
   }
