@@ -59,7 +59,7 @@ def get_workset():
 @app.route('/worksets/items', methods=['POST'])
 def get_workset():
     ws_id = request_json()
-    ws = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').worksets_items(ws_id['id'])
+    ws = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').workset_items(ws_id['id'])
     return response_template(ws, 200)
 
 @app.route('/weight', methods=['POST'])
