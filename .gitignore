@@ -1,3 +1,5 @@
 *.pyc
 wcsa/*
 *.log
+static/node_modules/*
+static/package-lock.json
