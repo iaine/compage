@@ -13,3 +13,12 @@ describe('worksets', function() {
       expect(worksets).to.not.be.undefined;
     });
   });
+
+describe('worksetsAdd', function() {
+    it('not be null', function() {
+      var worksets = require('../worksets.js');
+      var workset = new Set();
+      worksets.addid(workset, ["workset440022"]);
+      assert.equal(workset.size, 1, 'Should not be null');
+    });
+  });

@@ -3,24 +3,28 @@
 */
 
 var workset = {
-  workset = new Set();
+  init: function () {
+    return new Set();
+  },
 
   /**
   *  Adds an id to the Set of worksets
   */
-  addid: function(worksetid) {
-    workset.add(worksetid);
-  }
+  addid: function(workset, worksetid) {
+    var _tmp = new Set(workset);
+    _tmp.add(worksetid);
+    return _tmp;
+  },
 
   /**
   *  Filter a set of ids into a new array
   */
   filterid: function(work, worksetid) {
-     var _tmp = new Set();
      for (var ids of worksetid) {
-         _tmp.add(ids);
+         console.log(ids);
+         work.add(ids);
      }
-     return _tmp;
+     return work;
   }
 }
 
