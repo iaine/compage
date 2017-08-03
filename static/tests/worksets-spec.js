@@ -18,7 +18,18 @@ describe('worksetsAdd', function() {
     it('not be null', function() {
       var worksets = require('../worksets.js');
       var workset = new Set();
-      worksets.addid(workset, ["workset440022"]);
+      worksets.addid(workset, "workset440022");
+      assert.equal(workset.size, 1, 'Should not be null');
+    });
+  });
+
+describe('worksets filter', function() {
+    it('be one when one id removed', function() {
+      var worksets = require('../worksets.js');
+      var workset = new Set();
+      worksets.addid(workset, "workset440022");
+      worksets.addid(workset, "workset87654");
+      worksets.filterid(workset, ["workset440022"]);
       assert.equal(workset.size, 1, 'Should not be null');
     });
   });
