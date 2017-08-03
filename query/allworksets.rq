@@ -1,0 +1,6 @@
+#Queries for all worksets by one user
+#Demo user is hardcoded, needs to be linked to the front end authentication system. 
+select ?s ?s where {{
+  ?s ?p ?o.
+  filter(regex(str(?o), "Demo user", "i")) .
+}}
