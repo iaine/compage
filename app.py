@@ -51,6 +51,17 @@ def get_linked_graphs():
     data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').join_graphs(graph['graph'])
     return response_template(data, 200)
 
+@app.route('/worksets', methods=['POST'])
+def get_workset():
+    ws = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').worksets()
+    return response_template(ws, 200)
+
+@app.route('/worksets/items', methods=['POST'])
+def get_workset():
+    ws_id = request_json()
+    ws = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').worksets_items(ws_id['id'])
+    return response_template(ws, 200)
+
 @app.route('/weight', methods=['POST'])
 def store_weight():
     weight = request.get_json()
