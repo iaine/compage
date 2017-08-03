@@ -53,6 +53,7 @@ def get_linked_graphs():
 
 @app.route('/worksets', methods=['POST'])
 def get_workset():
+    _id = request.json();
     ws = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').worksets()
     return response_template(ws, 200)
 
