@@ -78,22 +78,7 @@ editWorker.onmessage = function(e) {
 //set up the main call for the data to parse. 
 function reqListener () {
   var recordData = JSON.parse(this.responseText);
-  //parseData(recordData[0]);
-  /*parseName(recordData[0]['Author']);
-  parseName(recordData[0]['Title']);
-  parseTopics(recordData[0]['Title']);
-  parseTranslation(recordData[0]['Title']);
-  parseSubjects(recordData[0]['Terms']);
-  editDistance('Lewis Evans', 'Lewys Euans');
-  queryThesaurus('Rurimonde');
-  variants('Guilelmus', 'William');*/
-  //getLinks('http://eeboo.oerc.ox.ac.uk/eeboo/Arnauld_Antoine_1560-1619');
 }
-
-/*var oReq = new XMLHttpRequest();
-oReq.addEventListener("load", reqListener);
-oReq.open("GET", "/data");
-oReq.send();*/
 
 function log(msg) {
   var p = document.getElementById('log');
