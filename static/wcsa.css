@@ -94,9 +94,9 @@ div#data {
 
 div#id-data {
   display: inline-block;
-  width: 45%;
+  width: 47.5%;
   font: 0.8em arial, sans-serif;
-  margin-left:-4%;
+  /*margin-left: -1%;*/
 }
 
 div#id-data ul {
@@ -114,14 +114,32 @@ div#preds, div#searchobjects {
    float: left;
    margin: 1%;
    padding-left:1%;
-   width: 32%;
+   width: 45%;
+   height: 150px;
+}
+
+div#datum {
+   width: 80%;
 }
 
 div#extradatum {
-  width: 80%;
   font: 0.8em arial, sans-serif;
+  padding-top: 1%;
+  width: 100%;
 }
 
 div#subjects ul {
    list-style-type: none;
+}
+
+div#subjects {
+   width: 100%;
+   padding-top: 1%;
+   -webkit-column-count: 3;
+      -moz-column-count: 3;
+           column-count: 3;
+  -webkit-column-gap: 1%;
+     -moz-column-gap: 1%;
+          column-gap: 1%;
+
 }
