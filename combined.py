@@ -154,3 +154,10 @@ class JoinGraph:
             preds.append({ "value": data[1], "id": data[0]})
 
         return json.dumps(preds)
+
+    def workset_id(self, id):
+        '''
+           Take a list of worksets and return their items
+        '''
+        titles = []
+        return json.dumps(titles)
