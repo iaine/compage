@@ -145,7 +145,7 @@ class JoinGraph:
         '''
           Method to retain all worksets
         '''
-
+        sd = SparqlDao()
         qry_string = FileOps().open('query/allworksets.rq')
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
 
