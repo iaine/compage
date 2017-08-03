@@ -1,6 +1,6 @@
 <!doctype html>
 <head>
-<title>WCSA+DC and Cousin It</title>
+<title>WCSA+DC and Cousin Itt</title>
 <link rel="stylesheet" type="text/css" href="/static/wcsa.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -83,7 +83,10 @@
   }
 </script>
 </head>
-<body>
+<body onload="findWorksets('ignoreme')">
+<div id="navigation">
+  <div id="worksets">Worksets</div>
+</div>
 <div class="ui-widget">
   <input id="semautocomplete" />
   <div id="results"></div>
@@ -98,7 +101,20 @@
 <div id="extradatum">
   <div id="subject" />
 </div>
+<script src="static/worksets.js" type="application/javascript"></script>
 <script>
+workset.init();
+
+var ws = document.getElementById('worksets');
+var worksetWorker = new Worker('static/workers/worksetWorker.js');
+worksetWorker.onmessage = function(e) {
+   ws.innerHTML = workset.markup(e.data);
+}
+
+function findWorksets(username) {
+  worksetWorker.postMessage([username]);
+}
+
 //Worker to get the data
 var datum = document.getElementById('data');
 var objs = document.getElementById('searchobjects');
@@ -199,5 +215,6 @@ function markUpList(difference, divname, html) {
     datumWorker.postMessage(searchData);
   });
 </script>
+<script src="static/worksets.js" type="application/javascript"></script>
 </body>
 </html>
