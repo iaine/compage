@@ -125,7 +125,7 @@ function markUpList(difference, divname, html) {
   }
 
   //Worker to get the predicates
-  var sparqlWorker = new Worker('/static/sparql.js');
+  var sparqlWorker = new Worker('/static/worker/sparql.js');
     sparqlWorker.onmessage = function(e) {
     sparql.innerHTML = showPredicateWeightings(e.data);
   }
