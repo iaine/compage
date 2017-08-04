@@ -4,88 +4,31 @@
 <link rel="stylesheet" type="text/css" href="/static/wcsa.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="static/ldinjs.js" type="application/javascript"></script>
 <script>
-    var semdata = [];
-    function log() {
+    var semdata = ldinjs.init();
+    /*function log() {
       var _html = '';
       semdata.forEach( function(message) { _html += '<div>' + message.value + "<input type=\"button\" class=\"removebutton\" onclick='remove(\""+message.id+"\")' value=\"Remove\"></div>"});
       $( "#results" ).html(_html).prependTo( "#results" );
       $( "#results" ).scrollTop( 0 );
-    }
+    }*/
     $( function() {
  
     $( "#semautocomplete" ).autocomplete({
       source: "/search",
       minLength: 3,
       select: function( event, ui ) {
-        createDataObject(ui.item.value, ui.item.id);
+        ldinjs.createDataObject(ui.item.value, ui.item.id);
       }
     });
   } );
-  
-  /**
-  *  Method to remove an entity based on the id
-  *  @param{string} entity
-  */
-  function remove(entity) {
-    console.log("Remove" + entity);
-    semdata = semdata.filter( function(en) { return en.id != entity; });
-    console.log(semdata);
-    log();
-  }
-  
-  /**
-  *  Method to add an entity to the JSON object
-  */
-  function createDataObject(name, id) {
-     semdata.push({'id': id, 'value': name, 'data': new Set() });
-     log();
-  }
-
-  /**
-  *  Method of pushing many entities into the data object
-  *  @param{array} data
-  */
-  function pushData (data) {
-     data.forEach( function(d) { addDataToObject(d[0],d[1],d[2]);  } );
-  }
-  /**
-  *  Method to update an entity in the object with data
-  *  @param{string} entity
-  *  @param{string} pred
-  *  @param{string} obj
-  */
-  function addDataToObject(entity, pred, obj) {
-      semdata.filter( 
-         function (d) { if (d.id == entity) {
-            //check for existence of data in entity.data 
-            if (d.data.size > 1) {
-                console.log(obj + ' data: ' + checkDataExistence(d.data, pred, obj));
-                d.data.add({'p' : pred, 'o': obj });
-            } else {
-                d.data.add({'p' : pred, 'o': obj });
-            }
-         } 
-      });
-  }
-
-  /**
-  * Method to check for the existence of (pred, obj) pair in data
-  *
-  */
-  function checkDataExistence(dataObj, prede, obje) {
-      var inObj = new Set()
-      inObj = dataObj.forEach( function(y) {
-          console.log(obje + " : " + y.o);
-          if (y.p === prede){ if (y.o === obje) { console.log('o' + y.o + 'p' + y.p); return y; } }
-      });
-      return inObj;
-  }
 </script>
 </head>
 <body onload="findWorksets('ignoreme')">
-<div id="navigation">
+<div id="primary_navigation">
   <div id="worksets">Worksets</div>
+  <div id="selworksets">Selected Worksets</div>
 </div>
 <div class="ui-widget">
   <input id="semautocomplete" />
@@ -104,6 +47,7 @@
 <script src="static/worksets.js" type="application/javascript"></script>
 <script>
 workset.init();
+var selectedWorkset = new Set();
 
 var ws = document.getElementById('worksets');
 var worksetWorker = new Worker('static/workers/worksetWorker.js');
@@ -123,7 +67,7 @@ var lang = document.getElementById('subject')
 
 var datumWorker = new Worker('/static/data.js');
 datumWorker.onmessage = function(e) {
-  pushData(e.data);
+  ldinjs.pushData(e.data);
   datum.innerHTML = "";
   datum.innerHTML = createDataList(semdata, "id-data");
   objs.innerHTML = createObjectLists(semdata);
@@ -155,7 +99,6 @@ function markUpList(difference, divname, html) {
    html = "<div id=\"objectlist\">";
    objectSet.forEach( function(x) { html += "<div onclick=\"findPredicates('"+ x +"')\">" + x + "</div> ";  } );
    html += "</div>";
-   console.log(objectSet);
    return html;
   }
 
