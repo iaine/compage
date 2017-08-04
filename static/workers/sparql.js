@@ -10,7 +10,7 @@ onmessage = function(e) {
   }
 
   var oReq = new XMLHttpRequest();
-  oReq.open("POST", "/sparql", true);
+  oReq.open("POST", "/predicates", true);
   oReq.addEventListener("load", sparqlListener);
   oReq.setRequestHeader("Content-type", "application/json");
   oReq.send(JSON.stringify({'entity': e.data[0]}));
