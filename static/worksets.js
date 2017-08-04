@@ -22,7 +22,6 @@ var workset = function() {
   */
   function filterid(work, worksetid) {
      for (var ids of worksetid) {
-         console.log(ids);
          work.delete(ids);
      }
      return work;
@@ -34,7 +33,7 @@ var workset = function() {
   function markup(workids) {
     html = "<ul>";
     workids.forEach( 
-      function(y) { html += "<li id=\""+ y.id+"\">"+ y.value +"</li>"; }
+      function(y) { html += "<li>"+ y.value + "<input type=\"button\" class=\"removebutton\" onclick='addToData(\""+y.id+"\")' value=\"Add to Data\"></li>"; }
     );
     html += "</ul>";
     return html;
