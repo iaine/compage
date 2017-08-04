@@ -54,7 +54,12 @@ setOperations = {
      var union = this.calculateSetUnion([setA, setB]);  
      return parseFloat(intersect.size / union.size);
    }
-}
 
-module.exports = setOperations;
+   return {
+     calculateSetUnion: calculateSetUnion,
+     calculateSetIntersect: calculateSetIntersect,
+     calculateSetDifference: calculateSetDifference,
+     jaccardSimilarity: jaccardSimilarity
+   }
+}
 
