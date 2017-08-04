@@ -14,7 +14,7 @@ class SparqlDao:
         data = []
 
         sparql = SPARQLWrapper(endpoint)
-
+        sparql.method='POST'
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
