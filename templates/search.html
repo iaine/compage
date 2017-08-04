@@ -93,19 +93,33 @@ function markUpList(difference, divname, html) {
   function createObjectLists(data) {
    listObjects(data);
    html = "<div id=\"objectlist\">";
-   objectSet.forEach( function(x) { html += "<div onclick=\"findPredicates('"+ x +"')\">" + x + "</div> ";  } );
+   objectSet.forEach( function(x) { 
+       html += "<div>" + x.p 
+       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicatesWS(\""+x.p+"\", \""+x.o+"\", \"http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7\")' value=\"Search Workset\">"
+       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicates(\""+x.p+"\")' value=\"Search All\">"
+       + "</div> ";  
+   });
    html += "</div>";
    return html;
   }
 
   //filter the data to recover all objects
   function listObjects(data) {
-    //data.filter(function(x) {objectSet.add(x[2])});
     data.forEach( 
-       function(d) { d.data.forEach(function(x) { objectSet.add(x.o);  }); }
+       function(d) { d.data.forEach(function(x) { objectSet.add(x);  }); }
     );
   }
+  /**
+  *  Method to search the worksets for (pred, obj) pairs
+  */
+  function findPredicatesWS(pred,obj,ws) {
+    console.log('in predicates');
+    sparqlWorker.postMessage([pred,obj,ws]);
+  }
 
+  /**
+  *  Method to search the whoel graph for (pred, obj) pairs
+  */
   function findPredicates(uriA) {
     sparqlWorker.postMessage([uriA]);
   }
@@ -125,7 +139,7 @@ function markUpList(difference, divname, html) {
   }
 
   //Worker to get the predicates
-  var sparqlWorker = new Worker('/static/worker/sparql.js');
+  var sparqlWorker = new Worker('/static/workers/sparql.js');
     sparqlWorker.onmessage = function(e) {
     sparql.innerHTML = showPredicateWeightings(e.data);
   }
