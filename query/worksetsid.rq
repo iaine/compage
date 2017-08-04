@@ -1,0 +1,6 @@
+#Sparql to get the book items from a workset
+select ?s ?o where {{
+  ?x ?p ?s.
+  ?s <http://www.w3.org/2000/01/rdf-schema#label> ?o .
+  VALUES ?x {{ {0} }}
+}}
