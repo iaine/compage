@@ -118,6 +118,30 @@ class JoinGraph:
 
         return json.dumps(preds)
 
+    def search_predicates_object(self, predicate, obj, workset):
+        '''
+           Search (predicate, object) pair in a workset
+        '''
+        sd = SparqlDao()
+
+        if "http" in obj:
+            qry_string = FileOps().open('query/search_predicates_uri_ws.rq')
+            qry_string = qry_string.format('<'+pred+'>', '<'+obj+'>', '<'+workset+'>')
+        else:
+            qry_string = FileOps().open('query/search_predicates_literal_ws.rq')
+            qry_string = qry_string.format('<'+pred+'>','"'+obj+'"', '<'+workset+'>')
+
+        original = sd.autocomplete_sparql(self.endpoint, qry_string)
+
+        count = 0
+        preds = []
+        for orig in original:
+            count += int(orig[0])
+
+        for data in original:
+            preds.append({ "predicate": data[1], "weight": self._calculate_weight(data[0], count)})
+
+        return json.dumps(preds)
     def _calculate_weight(self, weight, count):
         if weight is None or weight < 1:
             return 0
