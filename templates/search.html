@@ -7,12 +7,7 @@
 <script src="static/ldinjs.js" type="application/javascript"></script>
 <script>
     var semdata = ldinjs.init();
-    /*function log() {
-      var _html = '';
-      semdata.forEach( function(message) { _html += '<div>' + message.value + "<input type=\"button\" class=\"removebutton\" onclick='remove(\""+message.id+"\")' value=\"Remove\"></div>"});
-      $( "#results" ).html(_html).prependTo( "#results" );
-      $( "#results" ).scrollTop( 0 );
-    }*/
+
     $( function() {
  
     $( "#semautocomplete" ).autocomplete({
@@ -20,6 +15,7 @@
       minLength: 3,
       select: function( event, ui ) {
         ldinjs.createDataObject(ui.item.value, ui.item.id);
+        ldinjs.markupSearch();
       }
     });
   } );
