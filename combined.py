@@ -146,7 +146,9 @@ class JoinGraph:
           Method to retain all worksets
         '''
         sd = SparqlDao()
+        
         qry_string = FileOps().open('query/allworksets.rq')
+
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
 
         preds = []
@@ -155,9 +157,17 @@ class JoinGraph:
 
         return json.dumps(preds)
 
-    def workset_id(self, id):
+    def worksets_by_id(self, workset_id):
         '''
-           Take a list of worksets and return their items
+          Method to get all ids from a known workset
         '''
-        titles = []
-        return json.dumps(titles)
+        sd = SparqlDo()
+        qry_string = FileOps().open('query/worksetsid.rq').format(workset_id)
+
+        original = sd.autocomplete_sparql(self.endpoint, qry_string)
+
+        preds = []
+        for data in original:
+            preds.append({ "value": data[1], "id": data[0]})
+
+        return json.dumps(preds)
