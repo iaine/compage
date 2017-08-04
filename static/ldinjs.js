@@ -22,7 +22,7 @@ var ldinjs = function () {
   */
   function createDataObject(name, id) {
      semdata.push({'id': id, 'value': name, 'data': new Set() });
-     this.markupSearch();
+     //this.markupSearch();
   }
 
   /**
