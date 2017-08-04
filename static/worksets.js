@@ -33,16 +33,38 @@ var workset = function() {
   function markup(workids) {
     html = "<ul>";
     workids.forEach( 
-      function(y) { html += "<li>"+ y.value + "<input type=\"button\" class=\"removebutton\" onclick='addToData(\""+y.id+"\")' value=\"Add to Data\"></li>"; }
+      function(y) { html += "<li>"+ y.value + "<input type=\"button\" class=\"removebutton\" onclick='workset.addToData(\""+y.id+"\")' value=\"Add to Data\"></li>"; }
     );
     html += "</ul>";
     return html;
+  }
+
+  /**
+  * Method to get the details of the data from the workset id
+  */
+  function addToData(worksetid) {
+    var wsResponse;
+
+    function wsListener () {
+      wsResponse = JSON.parse(this.responseText);
+      wsResponse.forEach(function (d) { 
+        ldinjs.createDataObject(d.value,d.id);
+      });
+      ldinjs.markupSearch();
+    } 
+
+    var oReq = new XMLHttpRequest();
+    oReq.open("POST", "/worksets/items", true);
+    oReq.addEventListener("load", wsListener);
+    oReq.setRequestHeader("Content-type", "application/json");
+    oReq.send(JSON.stringify({'id': worksetid}));
   }
 
   return {
       init:init, 
       addid: addid, 
       filterid:filterid, 
-      markup: markup
+      markup: markup, 
+      addToData: addToData
   }
 }()
