@@ -35,6 +35,15 @@ def sparql():
     data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_predicates(graph['entity'])
     return response_template(data, 200)
 
+@app.route('/predicates/workset', methods=['POST'])
+def search_pred_obj():
+    '''
+       Search (predicate, object) associated with a workset
+    '''
+    graph = request.get_json()
+    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_predicates_object(graph['pred'], graph['obj'], graph['ws'])
+    return response_template(data, 200)
+
 @app.route('/subject', methods=['GET', 'POST'])
 def get_linked_subjects():
     graph = request.get_json()
