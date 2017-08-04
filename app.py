@@ -26,10 +26,6 @@ def search_data():
 def get_index():
     return render_template('search.html')
 
-@app.route('/book')
-def get_single():
-    return render_template('index.html')
-
 @app.route('/sparql', methods=['POST'])
 def sparql():
     '''
