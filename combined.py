@@ -118,7 +118,7 @@ class JoinGraph:
 
         return json.dumps(preds)
 
-    def search_predicates_object(self, predicate, obj, workset):
+    def search_predicates_object(self, pred, obj, workset):
         '''
            Search (predicate, object) pair in a workset
         '''
