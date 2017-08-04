@@ -8,10 +8,18 @@ onmessage = function(e) {
     workerResult = JSON.parse(this.responseText);
     postMessage(workerResult);
   }
-
+  var payload;
+  var url; 
+  if (!e.data[1]) {
+    url =  '/predicates';
+    payload = JSON.stringify({'entity': e.data[0]});
+  } else {
+    url = '/predicates/workset'; 
+    payload = JSON.stringify({'pred': e.data[0], 'obj': e.data.[1], 'ws': e.data[2]}); 
+  }
   var oReq = new XMLHttpRequest();
-  oReq.open("POST", "/predicates", true);
+  oReq.open("POST", url, true);
   oReq.addEventListener("load", sparqlListener);
   oReq.setRequestHeader("Content-type", "application/json");
-  oReq.send(JSON.stringify({'entity': e.data[0]}));
+  oReq.send(payload);
 }
