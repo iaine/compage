@@ -26,7 +26,7 @@ def search_data():
 def get_index():
     return render_template('search.html')
 
-@app.route('/sparql', methods=['POST'])
+@app.route('/predicates', methods=['POST'])
 def sparql():
     '''
        Searches the predicates associated with an object
