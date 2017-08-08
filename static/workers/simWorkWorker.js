@@ -8,14 +8,9 @@ onmessage = function(e) {
     workerResult = JSON.parse(this.responseText);
     postMessage(workerResult);
   }
-  var payload;
   var url =  '/predicates/similarity'; 
-  // if the data is flagged as worket, pass on differently
-  if (!e.data[1]) {
-    payload = JSON.stringify({'dataObj': [e.data[0]]});
-  } else {
-    payload = JSON.stringify({'dataObj': [e.data[0]], 'flag': e.data[1]}); 
-  }
+
+  var payload = JSON.stringify({'dataObj': e.data});
 
   var oReq = new XMLHttpRequest();
   oReq.open("POST", url, true);
