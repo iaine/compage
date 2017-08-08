@@ -52,8 +52,8 @@ def similarity_works():
     '''
     graph = request.get_json()
     data = None
-    if graph['flag'] is "ws":
-        data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_similarities_ws(graph['dataObj'], graph['flag'])
+    if "flag" in graph:
+        data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_similarities(graph['dataObj'], ws=graph['flag'])
     else:
         data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_similarities(graph['dataObj'])
     return response_template(data, 200)
