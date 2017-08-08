@@ -10,7 +10,6 @@ onmessage = function(e) {
   }
   var payload;
   var url; 
-  console.log(e.data);
   if (!e.data[1]) {
     url =  '/predicates';
     payload = JSON.stringify({'entity': e.data[0]});
