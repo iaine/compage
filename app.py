@@ -64,10 +64,10 @@ def get_linked_subjects():
     data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_subject(graph['subject'])
     return response_template(data, 200)
 
-@app.route('/links', methods=['GET', 'POST'])
+@app.route('/cluster', methods=['POST'])
 def get_linked_graphs():
     graph = request.get_json()
-    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').join_graphs(graph['graph'])
+    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').join_graphs(graph['dataObj'])
     return response_template(data, 200)
 
 @app.route('/worksets', methods=['POST'])
