@@ -222,6 +222,6 @@ class JoinGraph:
 
         preds = []
         for data in original:
-            preds.append({ "value": data[1], "id": data[0]})
+            preds.append({ "value": data[0], "id": data[1]})
 
         return json.dumps(preds)
