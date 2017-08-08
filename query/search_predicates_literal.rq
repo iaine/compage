@@ -1,7 +1,8 @@
 #search for the predicates for the object
-
+# filter(str(?p1) = {0}) . -> our data is unlikely to allow matching across p, o so matching p
 select (count(?o) as ?s) ?o where {{
-   ?s ?o ?p1 .
-   filter(isLiteral(?p1)) .
-   filter(str(?p1) = {0}) .
+   ?d ?p ?s .
+   ?s {0} ?o .
+   filter(isLiteral(?o)) .
+   values ?d {{ {1} }}
 }} group by ?o

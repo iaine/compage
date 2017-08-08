@@ -1,6 +1,6 @@
 #search for the predicates for the object within a workset (or sets)
 select (count(?o) as ?s) ?o where {{
-   ?d ?p ?l
+   ?d ?p ?l .
    ?l {0} ?o .
    values ?d {{ {1} }}
 }} group by ?o
