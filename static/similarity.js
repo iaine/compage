@@ -1,9 +1,8 @@
 /**
-* Module to encapsulate the similarity algorithm
+* Module to encapsulate the similarity algorithms and mark up
 */
-var setOperations;
 
-setOperations = {
+var setOperations = function() {
 
   /**
   *  Method to provide the set union of a list of sets
