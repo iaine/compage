@@ -1,0 +1,5 @@
+#Query the predicates in  a workset
+select (count(?p) as ?s) ?p where {{
+  ?book ?p ?obj.
+  VALUES ?book { {0} }
+}} group by ?p
