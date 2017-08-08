@@ -84,8 +84,14 @@ class JoinGraph:
         original = []
         sd = SparqlDao()
 
-        qry_string = FileOps().open('query/search_subjects.rq')
-        qry_string = qry_string.format('<'+searchterm+'>')
+        #qry_string = FileOps().open('query/search_subjects.rq')
+        #qry_string = qry_string.format('<'+searchterm+'>')
+        if "http" in searchterm:
+            qry_string = FileOps().open('query/search_subjects_uri.rq')
+            qry_string = qry_string.format('<'+searchterm+'>')
+        else:
+            qry_string = FileOps().open('query/search_subjects_literal.rq')
+            qry_string = qry_string.format('"'+searchterm+'"')
 
         original = sd.list_sparql(self.endpoint, qry_string)
         return json.dumps(original)
@@ -187,6 +193,30 @@ class JoinGraph:
         '''
         sd = SparqlDao()
         qry_string = FileOps().open('query/worksetsid.rq').format('<'+workset_id+'>')
+
+        original = sd.autocomplete_sparql(self.endpoint, qry_string)
+
+        preds = []
+        for data in original:
+            preds.append({ "value": data[1], "id": data[0]})
+
+        return json.dumps(preds)
+
+    def search_similarities(self, data, ws=None):
+        '''
+          Method to search the similarities in a set of ids
+        '''
+        sd = SparqlDao()
+
+        data_obj = ''
+        for d in data:
+            data_obj += '<' + d + '>'
+
+        qry_string = None
+        if ws is None:
+            qry_string = FileOps().open('query/pred_by_title.rq').format(data_obj)
+        else:
+            qry_string = FileOps().open('query/pred_by_workset.rq').format(data_obj)
 
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
 
