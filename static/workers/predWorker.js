@@ -10,15 +10,14 @@ onmessage = function(e) {
     postMessage(workerResult);
   }
   var payload;
-  var url; 
+  var url =  '/predicates/similarity'; 
   // if the data is flagged as worket, pass on differently
-  if (e.data[1] == 'ws') {
-    url =  '/predicates/similarity';
-    payload = JSON.stringify({'dataObj': e.data[0]});
+  if (!e.data[1]) {
+    payload = JSON.stringify({'dataObj': [e.data[0]]});
   } else {
-    url = '/predicates/similarity/workset'; 
-    payload = JSON.stringify({'dataObj': e.data[0], 'flag': e.data[1]}); 
+    payload = JSON.stringify({'dataObj': [e.data[0]], 'flag': e.data[1]}); 
   }
+  console.log(payload);
   var oReq = new XMLHttpRequest();
   oReq.open("POST", url, true);
   oReq.addEventListener("load", predListener);
