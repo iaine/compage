@@ -8,7 +8,7 @@ setOperations = {
   /**
   *  Method to provide the set union of a list of sets
   */
-  calculateSetUnion: function(listOfSets) {
+  function calculateSetUnion(listOfSets) {
       var _tmp = new Set();
       listOfSets.forEach( function(y) {
           for (var i of y) {
@@ -16,12 +16,12 @@ setOperations = {
           }
       });
       return _tmp;
-    },
+    }
 
   /**
   *  Method to work out the intersection between two sets. 
   */
-  calculateSetIntersect: function(setA, setB) {
+  function  calculateSetIntersect(setA, setB) {
       var _tmp = new Set();
       //check if x is in Array y
       for (var i of setB) {
@@ -30,13 +30,13 @@ setOperations = {
           }
       }
       return _tmp;
-    },
+    }
 
     /**
     *  Method to get the set difference between set x and set y
     *
     */
-  calculateSetDifference: function(setA, setB) {
+    function calculateSetDifference(setA, setB) {
       var _tmp = new Set();
       for (var i of setB) {
           if(!setA.has(i)) {
@@ -44,22 +44,34 @@ setOperations = {
           }
       }
       return _tmp;
-    },
+    }
   
    /**
    *  Method to calculate the Jaccard similarity
    */
-   jaccardSimilarity: function(setA, setB) {
+   function jaccardSimilarity(setA, setB) {
      var intersect = this.calculateSetIntersect(setA, setB);
      var union = this.calculateSetUnion([setA, setB]);  
      return parseFloat(intersect.size / union.size);
+   }
+
+   /**
+   *  Method to create a mark up for the aggregations
+   */
+   function markUpAggregations(data) {
+     html = '<ul id="aggregates">';
+     data.forEach(
+         function (d) { html += '<li>' + d.id + ' | ' + d.value + '</li>';  }
+     );
+     return html += '</ul></div>';
    }
 
    return {
      calculateSetUnion: calculateSetUnion,
      calculateSetIntersect: calculateSetIntersect,
      calculateSetDifference: calculateSetDifference,
-     jaccardSimilarity: jaccardSimilarity
+     jaccardSimilarity: jaccardSimilarity, 
+     markUpAggregations: markUpAggregations
    }
 }
 
