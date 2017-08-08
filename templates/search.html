@@ -40,7 +40,17 @@
 <div id="extradatum">
   <div id="subject" />
 </div>
+
+<div id="similarity">
+  <input class="removebutton" type="button" value="Find Similarities" onclick="findSimilarities(semdata)" />
+  <div id="similarities" />
+</div>
+<div>
+  <input class="removebutton" type="button" value="Find Similarities in Workset" onclick="findWorksetSimilarities('http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7', 'ws')" />
+  <div id="predicates" />
+</div>
 <script src="static/worksets.js" type="application/javascript"></script>
+<script src="static/similarity.js" type="application/javascript"></script>
 <script>
 workset.init();
 var selectedWorkset = new Set();
@@ -88,6 +98,36 @@ function markUpList(difference, divname, html) {
    return html;
 }
 
+  /* Similarity */
+  var sim = document.getElementById('similarities');
+  var pred = document.getElementById('predicates');
+  function findSimilarities() {
+     simWorker.postMessage(filterIds());
+  }
+
+  function findWorksetSimilarities(data, flag) {
+    predWorker.postMessage([data, flag]);
+  }
+
+  function filterIds() {
+      var _tmp = Array();
+      semdata.filter(function(d) { return _tmp.push(d.id);});
+      return _tmp;
+  }
+
+  var simWorker = new Worker('/static/workers/simWorkWorker.js');
+  simWorker.onmessage = function(e) {
+    console.log(e.data);
+    sim.innerHTML = sims.markUpAggregations(e.data);
+  }
+  var sims = setOperations()
+  var predWorker = new Worker('/static/workers/predWorker.js');
+  predWorker.onmessage = function(e) {
+    pred.innerHTML = sims.markUpAggregations(e.data);
+  }
+
+  /* Similarity */
+
   //find objects code
   var objectSet = new Set();
   function createObjectLists(data) {
@@ -109,16 +149,16 @@ function markUpList(difference, divname, html) {
        function(d) { d.data.forEach(function(x) { objectSet.add(x);  }); }
     );
   }
+
   /**
   *  Method to search the worksets for (pred, obj) pairs
   */
   function findPredicatesWS(pred,obj,ws) {
-    console.log('in predicates');
     sparqlWorker.postMessage([pred,obj,ws]);
   }
 
   /**
-  *  Method to search the whoel graph for (pred, obj) pairs
+  *  Method to search the whole graph for (pred, obj) pairs
   */
   function findPredicates(uriA) {
     sparqlWorker.postMessage([uriA]);
@@ -168,6 +208,5 @@ function markUpList(difference, divname, html) {
     datumWorker.postMessage(searchData);
   });
 </script>
-<script src="static/worksets.js" type="application/javascript"></script>
 </body>
 </html>
