@@ -45,9 +45,13 @@
   <input class="removebutton" type="button" value="Find Similarities" onclick="findSimilarities(semdata)" />
   <div id="similarities" />
 </div>
-<div>
+<div id="simpred">
   <input class="removebutton" type="button" value="Find Similarities in Workset" onclick="findWorksetSimilarities('http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7', 'ws')" />
   <div id="predicates" />
+</div>
+<div id="simclus">
+  <input class="removebutton" type="button" value="Find Similarities in Data" onclick="findDataSimilarities(semdata)" />
+  <div id="cluster" />
 </div>
 <script src="static/worksets.js" type="application/javascript"></script>
 <script src="static/similarity.js" type="application/javascript"></script>
@@ -101,12 +105,18 @@ function markUpList(difference, divname, html) {
   /* Similarity */
   var sim = document.getElementById('similarities');
   var pred = document.getElementById('predicates');
+  var clus = document.getElementById('cluster');
+
   function findSimilarities() {
      simWorker.postMessage(filterIds());
   }
 
   function findWorksetSimilarities(data, flag) {
     predWorker.postMessage([data, flag]);
+  }
+
+  function findDataSimilarities(data) {
+      clusterWorker.postMessage(filterIds());
   }
 
   function filterIds() {
@@ -126,6 +136,11 @@ function markUpList(difference, divname, html) {
     pred.innerHTML = sims.markUpAggregations(e.data);
   }
 
+  var sims = setOperations()
+  var clusterWorker = new Worker('/static/workers/clusterWorker.js');
+  clusterWorker.onmessage = function(e) {
+    cluster.innerHTML = sims.markUpAggregations(e.data);
+  }
   /* Similarity */
 
   //find objects code
