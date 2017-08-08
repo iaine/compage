@@ -1,0 +1,6 @@
+#searching for subjects 
+select ?s where {{
+   ?s ?p ?o .
+   filter(isLiteral(?o)) .
+   filter(?o = "{0}") .
+}}
