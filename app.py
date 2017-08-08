@@ -44,6 +44,20 @@ def search_pred_obj():
     data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_predicates_object(graph['pred'], graph['obj'], graph['ws'])
     return response_template(data, 200)
 
+@app.route('/predicates/similarity', methods=['POST'])
+@app.route('/predicates/similarity/workset', methods=['POST'])
+def similarity_works():
+    '''
+       Route to return similarity counts for predicates
+    '''
+    graph = request.get_json()
+    data = None
+    if graph['flag'] is "ws":
+        data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_similarities_ws(graph['dataObj'], graph['flag'])
+    else:
+        data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_similarities(graph['dataObj'])
+    return response_template(data, 200)
+
 @app.route('/subject', methods=['GET', 'POST'])
 def get_linked_subjects():
     graph = request.get_json()
