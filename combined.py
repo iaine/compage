@@ -107,14 +107,14 @@ class JoinGraph:
             qry_string = FileOps().open('query/search_predicates_literal.rq')
             qry_string = qry_string.format('"'+searchterm+'"')
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
-
+        print(qry_string)
         count = 0
         preds = []
         for orig in original:
             count += int(orig[0])
 
         for data in original:
-            preds.append({ "predicate": data[1], "weight": self._calculate_weight(data[0], count)})
+            preds.append({ "predicate": data[1], "weight": self._calculate_weight(data[0], count), "count":int(count)})
 
         return json.dumps(preds)
 
@@ -126,20 +126,20 @@ class JoinGraph:
 
         if "http" in obj:
             qry_string = FileOps().open('query/search_predicates_uri_ws.rq')
-            qry_string = qry_string.format('<'+pred+'>', '<'+obj+'>', '<'+workset+'>')
+            qry_string = qry_string.format('<'+pred+'>', '<'+workset+'>')
         else:
             qry_string = FileOps().open('query/search_predicates_literal_ws.rq')
-            qry_string = qry_string.format('<'+pred+'>','"'+obj+'"', '<'+workset+'>')
+            qry_string = qry_string.format('<'+pred+'>', '<'+workset+'>')
 
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
-
+        print(qry_string)
         count = 0
         preds = []
         for orig in original:
             count += int(orig[0])
 
         for data in original:
-            preds.append({ "predicate": data[1], "weight": self._calculate_weight(data[0], count)})
+            preds.append({ "predicate": data[1], "weight": self._calculate_weight(data[0], count), "count": int(count)})
 
         return json.dumps(preds)
     def _calculate_weight(self, weight, count):
