@@ -1,4 +1,4 @@
 #search for the predicates for the object
 select (count(?o) as ?s) ?o where {{
-   ?d ?o {0} .
+   ?d  {0} ?o .
 }} group by ?o
