@@ -239,11 +239,10 @@ class JoinGraph:
 
         qry_string = FileOps().open('query/cluster.rq').format(graph_str)
 
-        merged_data = sd.run_remote_sparql(self.endpoint, qry_string)
+        merged_data = sd.similarity_sparql(self.endpoint, qry_string)
 
         similar = Similarities()
         
-
         return json.dumps(similar.pair_similarities(merged_data))
 
 
