@@ -78,7 +78,7 @@ class Similarities():
 
         return similarities
 
-    def pair_similarities_list(self, init_graph, graph_list)
+    def pair_similarities_list(self, init_graph, graph_list):
         '''
           Method to get the data from the graphs
         '''
