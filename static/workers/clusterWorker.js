@@ -1,11 +1,12 @@
 /**
-*  Queries the endpoint to return the predicate weightings and ways of thinking about a term
+*  Queries the endpoint with the graph values to get the similarity stats
 */
 onmessage = function(e) {
   var workerResult;
   //set up the main call for the data to parse. 
   function predListener () {
     workerResult = JSON.parse(this.responseText);
+    console.log(workerResult);
     postMessage(workerResult);
   }
   var url =  '/cluster'; 
