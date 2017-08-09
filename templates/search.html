@@ -116,7 +116,7 @@ function markUpList(difference, divname, html) {
   }
 
   function findDataSimilarities(data) {
-      clusterWorker.postMessage(filterIds());
+    clusterWorker.postMessage(filterIds());
   }
 
   function filterIds() {
@@ -127,7 +127,6 @@ function markUpList(difference, divname, html) {
 
   var simWorker = new Worker('/static/workers/simWorkWorker.js');
   simWorker.onmessage = function(e) {
-    console.log(e.data);
     sim.innerHTML = sims.markUpAggregations(e.data);
   }
   var sims = setOperations()
