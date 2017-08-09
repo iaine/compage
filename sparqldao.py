@@ -36,7 +36,7 @@ class SparqlDao:
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
  
-        for r in results["results"]["bindings"]]:
+        for r in results["results"]["bindings"]:
             data[r["s"]["value"]].append((r["p"]["value"], r["o"]["value"]))
 
         return data
