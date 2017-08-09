@@ -67,7 +67,7 @@ def get_linked_subjects():
 @app.route('/cluster', methods=['POST'])
 def get_linked_graphs():
     graph = request.get_json()
-    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').join_graphs(graph['dataObj'])
+    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').clustering(graph['dataObj'])
     return response_template(data, 200)
 
 @app.route('/worksets', methods=['POST'])
