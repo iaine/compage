@@ -36,9 +36,9 @@ class JoinGraph:
         original = []
         sd = SparqlDao()
         
-        qry_string = FileOps().open('query/original_author.rq') 
-        qry_string = qry_string.format(graph)
-        original = sd.run_remote_sparql(self.endpoint, qry_string)
+        #qry_string = FileOps().open('query/original_author.rq') 
+        #qry_string = qry_string.format(graph)
+        #original = sd.run_remote_sparql(self.endpoint, qry_string)
 
         #get the other graphs linked by VIAF
         qry_string = FileOps().open('query/walk_path_query.rq')
@@ -225,3 +225,25 @@ class JoinGraph:
             preds.append({ "value": data[0], "id": data[1]})
 
         return json.dumps(preds)
+
+    def clustering (self, graphs):
+        '''
+          methods takes a set of graphs and then creates a similarity
+        '''
+        merged_data = []
+        sd = SparqlDao()
+
+        graph_str = ''
+        for graph in graphs:
+            graph_str += '<' + graph + '>'
+
+        qry_string = FileOps().open('query/cluster.rq').format(graph_str)
+
+        merged_data = sd.run_remote_sparql(self.endpoint, qry_string)
+
+        similar = Similarities()
+        
+
+        return json.dumps(similar.pair_similarities(merged_data))
+
+
