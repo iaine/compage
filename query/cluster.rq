@@ -1,0 +1,6 @@
+#Seletes all subject, predicate, object for a set of graphs
+select ?s ?p ?o where {{  
+      ?s ?p ?o .
+      VALUES ?s {{ {0} }}
+}}
+
