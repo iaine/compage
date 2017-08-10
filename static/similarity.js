@@ -65,12 +65,30 @@ var setOperations = function() {
      return html += '</ul></div>';
    }
 
+   /**
+   *  Called from the markup to show the similarities between an item 
+   *  and other items in the result set. 
+   */
+   function markUpSimilarity(entityid) {
+     html = '<ul id="similarities">';
+     semdata.filter(
+        function(d) {
+            if (d.id == entityid) {
+                d.similarity.forEach( function (y) { y.forEach(function(b) {  html += '<li>' + b[1] + ':' + b[2] +  '</li>';});  });
+            }
+        }
+     );
+     html += '</ul></div>';
+     clus.innerHTML = html; 
+   }
+
    return {
      calculateSetUnion: calculateSetUnion,
      calculateSetIntersect: calculateSetIntersect,
      calculateSetDifference: calculateSetDifference,
      jaccardSimilarity: jaccardSimilarity, 
-     markUpAggregations: markUpAggregations
+     markUpAggregations: markUpAggregations, 
+     markUpSimilarity: markUpSimilarity
    }
 }
 
