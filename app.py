@@ -7,19 +7,23 @@ import json
 
 from combined import JoinGraph
 
+with open('./config.json', 'rb') as f:
+    config = json.load(f)
+
 app = Flask(__name__)
+app.config.update(config)
 
 @app.route('/data', methods=['POST'])
 def get_single_data():
    
     graph = request.get_json()
-    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').get_original(graph['data'])
+    data = JoinGraph(app.config['SPARQL']).get_original(graph['data'])
     return response_template(data, 200)
 
 @app.route('/search')
 def search_data():
     search = request.args.get('term')
-    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_data(search)
+    data = JoinGraph(app.config['SPARQL']).search_data(search)
     return response_template(data, 200)
 
 @app.route('/')
@@ -32,7 +36,7 @@ def sparql():
        Searches the predicates associated with an object
     '''
     graph = request.get_json()
-    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_predicates(graph['entity'])
+    data = JoinGraph(app.config['SPARQL']).search_predicates(graph['entity'])
     return response_template(data, 200)
 
 @app.route('/predicates/workset', methods=['POST'])
@@ -41,7 +45,7 @@ def search_pred_obj():
        Search (predicate, object) associated with a workset
     '''
     graph = request.get_json()
-    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_predicates_object(graph['pred'], graph['obj'], graph['ws'])
+    data = JoinGraph(app.config['SPARQL']).search_predicates_object(graph['pred'], graph['obj'], graph['ws'])
     return response_template(data, 200)
 
 @app.route('/predicates/similarity', methods=['POST'])
@@ -53,37 +57,41 @@ def similarity_works():
     graph = request.get_json()
     data = None
     if "flag" in graph:
-        data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_similarities(graph['dataObj'], ws=graph['flag'])
+        data = JoinGraph(app.config['SPARQL']).search_similarities(graph['dataObj'], ws=graph['flag'])
     else:
-        data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_similarities(graph['dataObj'])
+        data = JoinGraph(app.config['SPARQL']).search_similarities(graph['dataObj'])
     return response_template(data, 200)
 
 @app.route('/subject', methods=['GET', 'POST'])
 def get_linked_subjects():
     graph = request.get_json()
-    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').search_subject(graph['subject'])
+    data = JoinGraph(app.config['SPARQL']).search_subject(graph['subject'])
     return response_template(data, 200)
 
 @app.route('/cluster', methods=['POST'])
 def get_linked_graphs():
     graph = request.get_json()
-    data = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').clustering(graph['dataObj'])
+    data = JoinGraph(app.config['SPARQL']).clustering(graph['dataObj'])
     return response_template(data, 200)
 
 @app.route('/worksets', methods=['POST'])
 def get_workset():
     _id = request.get_json();
-    ws = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').worksets()
+    ws = JoinGraph(app.config['SPARQL']).worksets()
     return response_template(ws, 200)
 
 @app.route('/worksets/items', methods=['POST'])
 def get_workset_items():
     ws_id = request.get_json()
-    ws = JoinGraph('http://129.67.193.130:10080/blazegraph/sparql').worksets_by_id(ws_id['id'])
+    ws = JoinGraph(app.config['SPARQL']).worksets_by_id(ws_id['id'])
     return response_template(ws, 200)
 
 @app.route('/weight', methods=['POST'])
 def store_weight():
+    '''
+       Route to allow a weighting from the client to be stored. 
+       Only a dummy for the original prototype. 
+    '''
     weight = request.get_json()
     return response_template("stored", 200)
     
