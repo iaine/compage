@@ -21,8 +21,7 @@ var ldinjs = function () {
   *  Method to add an entity to the JSON object
   */
   function createDataObject(name, id) {
-     semdata.push({'id': id, 'value': name, 'data': new Set() });
-     //this.markupSearch();
+     semdata.push({'id': id, 'value': name, 'data': new Set(), 'similarity' Array() });
   }
 
   /**
