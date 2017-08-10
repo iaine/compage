@@ -21,7 +21,7 @@ var ldinjs = function () {
   *  Method to add an entity to the JSON object
   */
   function createDataObject(name, id) {
-     semdata.push({'id': id, 'value': name, 'data': new Set(), 'similarity' Array() });
+     semdata.push({'id': id, 'value': name, 'data': new Set(), 'similarity': new Array() });
   }
 
   /**
@@ -67,11 +67,28 @@ var ldinjs = function () {
   }
 
   /**
+  *   Method to add similarity to data object
+  */
+  function addSimilaritytoObject(similarities) {
+    semdata.map(
+      function (x) { 
+        x.similarity.push(similarities[x.name]); }
+    );
+    this.markupSearch();
+  }
+  /**
   * Method to markup the data to be searched box
   */
   function markupSearch() {
       var _html = '';
-      semdata.forEach( function(message) { _html += '<div>' + message.value + "<input type=\"button\" class=\"removebutton\" onclick='ldinjs.remove(\""+message.id+"\")' value=\"Remove\"></div>"});
+      semdata.forEach( function(message) { _html += '<div>' + message.value + 
+         "<input type=\"button\" class=\"removebutton\" onclick='ldinjs.remove(\""+
+          message.id+"\")' value=\"Remove\"></div>";
+          if (0 < message.similarity.length ) {
+              _html += "<input type=\"button\" class=\"removebutton\" onclick='similarity.markUpSimilarity(\""+
+                 message.id+"\")' value=\"Show Similar\"></div>";
+          }
+      });
       $( "#results" ).html(_html).prependTo( "#results" );
       $( "#results" ).scrollTop( 0 );
   }
@@ -82,6 +99,7 @@ var ldinjs = function () {
     createDataObject: createDataObject,
     pushData: pushData, 
     addDataToObject: addDataToObject, 
+    addSimilaritytoObject: addSimilaritytoObject,
     checkDataExistence: checkDataExistence,
     markupSearch: markupSearch
   }
