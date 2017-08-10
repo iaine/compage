@@ -71,8 +71,13 @@ var ldinjs = function () {
   */
   function addSimilaritytoObject(similarities) {
     semdata.map(
-      function (x) { 
-        x.similarity.push(similarities[x.name]); }
+      function (x) {
+          similarities.filter( function(y) {
+            if (y.name == x.id) {
+              x.similarity.push(y.stats);
+            }
+          }); 
+      }
     );
     this.markupSearch();
   }
@@ -85,7 +90,7 @@ var ldinjs = function () {
          "<input type=\"button\" class=\"removebutton\" onclick='ldinjs.remove(\""+
           message.id+"\")' value=\"Remove\"></div>";
           if (0 < message.similarity.length ) {
-              _html += "<input type=\"button\" class=\"removebutton\" onclick='similarity.markUpSimilarity(\""+
+              _html += "<input type=\"button\" class=\"removebutton\" onclick='sims.markUpSimilarity(\""+
                  message.id+"\")' value=\"Show Similar\"></div>";
           }
       });
