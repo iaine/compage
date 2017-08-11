@@ -50,7 +50,7 @@ class Similarities():
             stats = self.pair_similarities_stats(start_graph,start_graph_values, graph_list)
             #graph_links = self.pair_similarities_list(start_graph, graph_list)
             #unlinks = self.pair_similarities_dissimilar(graph_links, graph)
-            similarities.append({'name':start_graph, 'sim': stats})
+            similarities.append({ "name":start_graph, "stats": stats })
 
         return similarities
                 
