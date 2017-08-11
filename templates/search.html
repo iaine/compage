@@ -7,15 +7,6 @@
 <script src="static/ldinjs.js" type="application/javascript"></script>
 <script>
     var semdata = ldinjs.init();
-    var postdata = document.getElementById('wsNumber');
-    var postWorker = new Worker('static/workers/postWorker.js');
-    postWorker.onmessage = function(e) {
-        postdata.innerHTML = e.data;
-    }
-
-    function postData() {
-        postWorker.postMessage(semdata);
-    }
 
     $( function() {
  
@@ -66,6 +57,18 @@
 <div id="chart" />
 <script src="static/worksets.js" type="application/javascript"></script>
 <script src="static/similarity.js" type="application/javascript"></script>
+<script>
+    var postdata = document.getElementById('wsNumber');
+    var postWorker = new Worker('static/workers/postWorker.js');
+    postWorker.onmessage = function(e) {
+        let retdata = (!e.data)? "Cannot be saved" : e.data;
+        postdata.innerHTML = "<div id='wsNum'>"+retdata+'</div>';
+    }
+
+    function postData() {
+        postWorker.postMessage(semdata);
+    }
+</script>
 <script>
 workset.init();
 var selectedWorkset = new Set();
