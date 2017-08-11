@@ -6,7 +6,6 @@ onmessage = function(e) {
   //set up the main call for the data to parse. 
   function predListener () {
     workerResult = JSON.parse(this.responseText);
-    console.log(workerResult);
     postMessage(workerResult);
   }
   var url =  '/cluster'; 
