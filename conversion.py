@@ -17,7 +17,7 @@ class Convert():
         _data = self._to_json(data)
         self._to_data_graph(_data['id'], _data['data'])
         self._to_stats_graph(_data['id'], _data['stats'])
-        return _generate_uid
+        return json.dumps({ 'id': self._generate_uid})
 
     def _to_json(self, d):
         '''
