@@ -3,21 +3,34 @@
 '''
 import json
 import uuid
-from rdflib import Graph
+from rdflib import Graph, URIRef, Literal, Namespace
+import time
 
 class Convert():
     '''
        Class containing methods for the data conversion
     '''
 
-    def convert_json_rdf(self, data):
+    def __init__ (self):
+        self.EEBO = Namespace("http://eeboo.oerc.ox.ac.uk/")
+
+    def dump_to_disk(self, fs, data):
+        if data is None:
+            raise Exception("Data is empty")
+        _data = json.dumps(data)
+        for d in data:
+            with open(fs + str(time.time())+".json", 'wb') as f:
+                f.write(json.dumps(d))
+
+    def convert_json_rdf(self, _data):
         '''
           Method to save the JSON from the UI to rdf
         '''
-        _data = self._to_json(data)
-        self._to_data_graph(_data['id'], _data['data'])
-        self._to_stats_graph(_data['id'], _data['stats'])
-        return json.dumps({ 'id': self._generate_uid})
+        for data in _data:
+            self._to_data_graph(data["id"], data["data"])
+            self._to_stats_graph(data["id"], data["similarity"])
+        
+        return json.dumps({ "id": self._generate_uid})
 
     def _to_json(self, d):
         '''
@@ -40,7 +53,7 @@ class Convert():
         g = Graph()
 
         for gd in datagraph:
-            g.add( (_id, gd[0], gd[1]) )
+            g.add( (URIRef(_id), gd[0], gd[1]) )
 
         self._write("data" ,g, _id)
 
@@ -49,7 +62,7 @@ class Convert():
            Method to write stats graph to data
         '''
         g = Graph()
-
+        
         for gd in statsgraph:
             g.add( (gd[0], gd[1], gd[2]) )
 
