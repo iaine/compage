@@ -8,10 +8,10 @@ onmessage = function(e) {
     workerResult = JSON.parse(this.responseText);
     postMessage(workerResult);
   }
-  var payload = JSON.stringify(e.data)
+  var payload = JSON.stringify({"dataObj":e.data});
   var url =  '/worksets/save'; 
   var oReq = new XMLHttpRequest();
-  oReq.open("POST", url, true);
+  oReq.open("PUT", url, true);
   oReq.addEventListener("load", postListener);
   oReq.setRequestHeader("Content-type", "application/json");
   oReq.send(payload);
