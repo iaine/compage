@@ -6,7 +6,7 @@ onmessage = function(e) {
   //set up the main call for the data to parse. 
   function postListener () {
     workerResult = JSON.parse(this.responseText);
-    postMessage(workerResult);
+    postMessage(workerResult['id']);
   }
   var payload = JSON.stringify({"dataObj":e.data});
   var url =  '/worksets/save'; 
