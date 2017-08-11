@@ -21,6 +21,7 @@ class Convert():
         for d in data:
             with open(fs + str(time.time())+".json", 'wb') as f:
                 f.write(json.dumps(d))
+        return json.dumps({ "id": self._generate_uid()})
 
     def convert_json_rdf(self, _data):
         '''
@@ -44,7 +45,7 @@ class Convert():
         '''
            Method to return a UID
         '''
-        return uuid.uuid4()
+        return str(uuid.uuid4())
  
     def _to_data_graph(self, _id, datagraph):
         '''
