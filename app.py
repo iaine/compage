@@ -6,6 +6,7 @@ from flask import Flask, request, redirect, url_for, render_template, flash, jso
 import json
 
 from combined import JoinGraph
+from conversion import Convert
 
 with open('./config.json', 'rb') as f:
     config = json.load(f)
@@ -85,6 +86,17 @@ def get_workset_items():
     ws_id = request.get_json()
     ws = JoinGraph(app.config['SPARQL']).worksets_by_id(ws_id['id'])
     return response_template(ws, 200)
+
+@app.route('/worksets/save', methods=['PUT'])
+def save_workset():
+    '''
+       Method to allow for the writing of the JSON data to files
+       Returns a dummy method
+    '''
+    ws_id = request.get_json()
+    uid = Convert().dump_to_disk(app.config['fs'], ws_id['dataObj'])
+    return response_template(uid, 200)
+    
 
 @app.route('/weight', methods=['POST'])
 def store_weight():
