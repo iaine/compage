@@ -7,6 +7,15 @@
 <script src="static/ldinjs.js" type="application/javascript"></script>
 <script>
     var semdata = ldinjs.init();
+    var postdata = document.getElementById('wsNumber');
+    var postWorker = new Worker('static/workers/postWorker.js');
+    postWorker.onmessage = function(e) {
+        postdata.innerHTML = e.data;
+    }
+
+    function postData() {
+        postWorker.postMessage(semdata);
+    }
 
     $( function() {
  
@@ -25,6 +34,7 @@
 <div id="primary_navigation">
   <div id="worksets">Worksets</div>
   <div id="selworksets">Selected Worksets</div>
+  <div id="save"><input class="removebutton" type="button" value="Save to Workset" onclick="postData()" /><div id="wsNumber" /></div>
 </div>
 <div class="ui-widget">
   <input id="semautocomplete" />
