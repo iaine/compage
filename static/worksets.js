@@ -31,11 +31,11 @@ var workset = function() {
   *  Method to handle the markup for the workset list
   */
   function markup(workids) {
-    html = "<ul>";
+    html = "<div id='workset-id'><h3>Your Worksets</h3><ul>";
     workids.forEach( 
       function(y) { html += "<li>"+ y.value + "<input type=\"button\" class=\"removebutton\" onclick='workset.addToData(\""+y.id+"\")' value=\"Add to Data\"></li>"; }
     );
-    html += "</ul>";
+    html += "</ul></div>";
     return html;
   }
 
