@@ -3,7 +3,6 @@
 */
 onmessage = function(e) {
   var workerResult;
-  console.log('Message received from main script');
   //set up the main call for the data to parse. 
   function stemListener () {
     workerResult = JSON.parse(this.responseText);
