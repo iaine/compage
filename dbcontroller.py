@@ -136,7 +136,7 @@ class JoinGraph:
             qry_string = qry_string.format('<'+pred+'>', '<'+workset+'>')
 
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
-        print(qry_string)
+
         count = 0
         preds = []
         for orig in original:
