@@ -146,7 +146,7 @@ function markUpList(difference, divname, html) {
   var sims = setOperations();
   var predWorker = new Worker('/static/workers/predWorker.js');
   predWorker.onmessage = function(e) {
-    pred.innerHTML = sets.markUpAggregations(e.data);
+    pred.innerHTML = sims.markUpAggregations(e.data);
   }
 
   var sims = setOperations()
