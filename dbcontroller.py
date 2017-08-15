@@ -84,8 +84,6 @@ class JoinGraph:
         original = []
         sd = SparqlDao()
 
-        #qry_string = FileOps().open('query/search_subjects.rq')
-        #qry_string = qry_string.format('<'+searchterm+'>')
         if "http" in searchterm:
             qry_string = FileOps().open('query/search_subjects_uri.rq')
             qry_string = qry_string.format('<'+searchterm+'>')
@@ -113,7 +111,7 @@ class JoinGraph:
             qry_string = FileOps().open('query/search_predicates_literal.rq')
             qry_string = qry_string.format('"'+searchterm+'"')
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
-        print(qry_string)
+
         count = 0
         preds = []
         for orig in original:
