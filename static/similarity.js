@@ -23,9 +23,7 @@ var setOperations = function() {
   function  calculateSetIntersect(setA, setB) {
       let _tmp = new Set();
       for (var i of setB) {
-        if (setA.has(i)) {  
-          _tmp.add(i); 
-        }
+        setA.forEach( x => { if (x.p == i.p && x.o == i.o) { _tmp.add(i); } });
       }
       return _tmp;
     }
