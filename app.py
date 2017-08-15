@@ -5,7 +5,7 @@
 from flask import Flask, request, redirect, url_for, render_template, flash, json
 import json
 
-from combined import JoinGraph
+from dbcontroller import JoinGraph
 from conversion import Convert
 
 with open('./config.json', 'rb') as f:
