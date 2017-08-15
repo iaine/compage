@@ -5,21 +5,6 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="static/ldinjs.js" type="application/javascript"></script>
-<script>
-    var semdata = ldinjs.init();
-
-    $( function() {
- 
-    $( "#semautocomplete" ).autocomplete({
-      source: "/search",
-      minLength: 3,
-      select: function( event, ui ) {
-        ldinjs.createDataObject(ui.item.value, ui.item.id);
-        ldinjs.markupSearch();
-      }
-    });
-  } );
-</script>
 </head>
 <body onload="findWorksets('ignoreme')">
 <div id="primary_navigation">
@@ -57,7 +42,21 @@
 <div id="chart" />
 <script src="static/worksets.js" type="application/javascript"></script>
 <script src="static/similarity.js" type="application/javascript"></script>
+<script src="static/drilldown.js" type="application/javascript"></script>
 <script>
+    var semdata = ldinjs.init();
+
+    $( function() {
+ 
+    $( "#semautocomplete" ).autocomplete({
+      source: "/search",
+      minLength: 3,
+      select: function( event, ui ) {
+        ldinjs.createDataObject(ui.item.value, ui.item.id);
+        ldinjs.markupSearch();
+      }
+    });
+  } );
     var postdata = document.getElementById('wsNumber');
     var postWorker = new Worker('static/workers/postWorker.js');
     postWorker.onmessage = function(e) {
@@ -68,8 +67,8 @@
     function postData() {
         postWorker.postMessage(semdata);
     }
-</script>
-<script>
+
+var drillDown  =  new drillDown();
 workset.init();
 var selectedWorkset = new Set();
 
@@ -92,31 +91,12 @@ var lang = document.getElementById('subject')
 var datumWorker = new Worker('/static/data.js');
 datumWorker.onmessage = function(e) {
   ldinjs.pushData(e.data);
-  datum.innerHTML = "";
-  datum.innerHTML = createDataList(semdata, "id-data");
-  objs.innerHTML = createObjectLists(semdata);
+  //markup the result box
+  datum.innerHTML = drillDown.createDataList(semdata, "id-data");
+  //markup the object box
+  objs.innerHTML = drillDown.createObjectLists(semdata);
 }
 
-/**
-*  Function to create a list per data object of preds : objs
-*/
-function createDataList(data, div) {
-    var markup = '';
-    data.forEach(function(x) { markup = markUpList(x, div, markup); });
-    return markup;
-}
-
-function markUpList(difference, divname, html) {
-   html += "<div id='"+divname+"'><ul>";
-   html += "<h3>" + difference.value + "</h3>";
-   difference.data.forEach(
-        function (x) { html += "<li>" + x.p + " : " + x.o + "</li>"; } 
-   );
-   html += "</ul></div>";
-   return html;
-}
-
-  /* Similarity */
   var sim = document.getElementById('similarities');
   var pred = document.getElementById('predicates');
   var clus = document.getElementById('cluster');
@@ -131,12 +111,6 @@ function markUpList(difference, divname, html) {
 
   function findDataSimilarities(data) {
     clusterWorker.postMessage(filterIds());
-  }
-
-  function filterIds() {
-      var _tmp = Array();
-      semdata.filter(function(d) { return _tmp.push(d.id);});
-      return _tmp;
   }
 
   var simWorker = new Worker('/static/workers/simWorkWorker.js');
@@ -155,29 +129,6 @@ function markUpList(difference, divname, html) {
     ldinjs.addSimilaritytoObject(e.data);
   }
   /* Similarity */
-
-  //find objects code
-  var objectSet = new Set();
-  function createObjectLists(data) {
-   listObjects(data);
-   html = "<div id=\"objectlist\">";
-   objectSet.forEach( function(x) { 
-       html += "<div>" + x.p 
-       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicatesWS(\""+x.p+"\", \""+x.o+"\", \"http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7\")' value=\"Search Workset\">"
-       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicates(\""+x.p+"\")' value=\"Search All\">"
-       + "</div> ";  
-   });
-   html += "</div>";
-   return html;
-  }
-
-  //filter the data to recover all objects
-  function listObjects(data) {
-    data.forEach( 
-       function(d) { d.data.forEach(function(x) { objectSet.add(x);  }); }
-    );
-  }
-
   /**
   *  Method to search the worksets for (pred, obj) pairs
   */
@@ -195,35 +146,17 @@ function markUpList(difference, divname, html) {
   //Worker to fetch the subjects per predicate
   var langWorker = new Worker('/static/subject.js');
     langWorker.onmessage = function(e) {
-    lang.innerHTML = showSubjects(e.data);
-  }
-
-  //subjects listing
-  function showSubjects(data) {
-    html = "<div id='subjects'><ul>";
-    data.map( function(x) { html += "<li onclick='createDataObject(\""+x+"\", \""+x+"\")'>" + x + "</li>"  } );
-    html += "</ul></div>";
-    return html;
+    lang.innerHTML = drillDown.showSubjects(e.data);
   }
 
   //Worker to get the predicates
   var sparqlWorker = new Worker('/static/workers/sparql.js');
     sparqlWorker.onmessage = function(e) {
-    sparql.innerHTML = showPredicateWeightings(e.data);
-  }
-
-  // show the predicate weightings in a simple list for now
-  function showPredicateWeightings(data) {
-    html = "<div id='weightings'>";
-    data.map( function(x) { 
-        html += "<div onclick=\"associateSubject('"+x.predicate+"')\">" + x.predicate + " : " + x.weight + "%</div>";  
-    } );
-    html += "</div>";
-    return html;
+    sparql.innerHTML = drillDown.markupPredicateWeightings(e.data);
   }
 
   /**
-  *  Associate a subject to a predicate and search knowledge base
+  *  Find a subject to a predicate and search knowledge base
   */
   function associateSubject(uri) {
     langWorker.postMessage([uri]);
