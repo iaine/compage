@@ -76,7 +76,7 @@ function markUpList(difference, divname, html) {
 
   return {
     filterIds: filterIds,
-    createDataLists: createDataLists, 
+    createDataList: createDataList, 
     createObjectLists: createObjectLists,
     markupSubjects : markupSubjects,
     markupPredicateWeightings : markupPredicateWeightings
