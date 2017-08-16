@@ -13,23 +13,31 @@ drillDown = function () {
   }
 
   /**
-*  Function to create a list per data object of preds : objs
-*/
-function createDataList(data, div) {
+  *  Function to create a list per data object of preds : objs
+  */
+  function createDataList(data, div) {
     var markup = '';
     data.forEach(function(x) { markup = markUpList(x, div, markup); });
     return markup;
-}
+  }
 
-function markUpList(difference, divname, html) {
-   html += "<div id='"+divname+"'><ul>";
-   html += "<h3>" + difference.value + "</h3>";
-   difference.data.forEach(
+  /**
+  *  Method to get the details for the object
+  */
+  function createSingleDatumList(data, div) {
+      let _data = semdata.filter(x => {if (x.id == data) { return x; }});
+      return markUpList(_data, div);
+  }
+
+  function markUpList(difference, divname, html) {
+    html += "<div id='"+divname+"'><ul>";
+    html += "<h3>" + difference.value + "</h3><ul>";
+    difference.data.forEach(
         function (x) { html += "<li>" + x.p + " : " + x.o + "</li>"; } 
-   );
-   html += "</ul></div>";
-   return html;
-}
+    );
+    html += "</ul></ul></div>";
+    return html;
+  }
 
     //find objects code
   var objectSet = new Set();
@@ -77,6 +85,7 @@ function markUpList(difference, divname, html) {
   return {
     filterIds: filterIds,
     createDataList: createDataList, 
+    createSingleDatumList: createSingleDatumList,
     createObjectLists: createObjectLists,
     markupSubjects : markupSubjects,
     markupPredicateWeightings : markupPredicateWeightings
