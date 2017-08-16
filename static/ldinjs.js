@@ -86,13 +86,14 @@ var ldinjs = function () {
   */
   function markupSearch() {
       var _html = '';
-      semdata.forEach( function(message) { _html += '<div>' + message.value + 
+      semdata.forEach( function(message) { _html += '<div id="data-title">' + message.value + 
          "<input type=\"button\" class=\"removebutton\" onclick='ldinjs.remove(\""+
-          message.id+"\")' value=\"Remove\"></div>";
+          message.id+"\")' value=\"Remove\">";
           if (0 < message.similarity.length ) {
               _html += "<input type=\"button\" class=\"removebutton\" onclick='sims.markUpSimilarity(\""+
-                 message.id+"\")' value=\"Show Similar\"></div>";
+                 message.id+"\")' value=\"Show Similar\">";
           }
+          _html += '</div>';
       });
       $( "#results" ).html(_html).prependTo( "#results" );
       $( "#results" ).scrollTop( 0 );
