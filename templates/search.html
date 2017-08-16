@@ -1,22 +1,35 @@
 <!doctype html>
 <head>
 <title>WCSA+DC and Cousin Itt</title>
-<link rel="stylesheet" type="text/css" href="/static/wcsa.css">
+<link rel="stylesheet" type="text/css" href="/static/css/wcsa.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="static/ldinjs.js" type="application/javascript"></script>
 </head>
 <body onload="findWorksets('ignoreme')">
-<div id="primary_navigation">
-  <div id="worksets">Worksets</div>
-  <div id="selworksets">Selected Worksets</div>
-  <div id="save"><input class="removebutton" type="button" value="Save to Workset" onclick="postData()" /><div id="wsNumber" /></div>
+<div id="nav">
+<nav id="primary_navigation">
+  <ul>
+  <li id="worksets">Worksets</li>
+  <li id="selworksets">Selected Worksets</li>
+  <li>Similarities
+   <ul>
+     <li onclick="findSimilarities(semdata)">Overall Similarities in Data</li>
+     <li onclick="findWorksetSimilarities('http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7', 'ws')">Overall Similarities in Workset</li>
+     <li onclick="findDataSimilarities(semdata)"> Find Similarities in Data</li>
+   </ul>
+  </li>
+  <li id="save"><input class="removebutton" type="button" value="Save to Workset" onclick="postData()" /><div id="wsNumber" /></li>
+  </ul>
+</nav>
 </div>
+
 <div class="ui-widget">
   <input id="semautocomplete" />
   <div id="results"></div>
 </div>
 <input class="searchbutton" type="button" value="Search Data" />
+
 <div id="data">
 </div>
 <div id="datum">
@@ -26,19 +39,10 @@
 <div id="extradatum">
   <div id="subject" />
 </div>
-
-<div id="similarity">
-  <input class="removebutton" type="button" value="Find Similarities" onclick="findSimilarities(semdata)" />
+<!-- Data calculations -->
   <div id="similarities" />
-</div>
-<div id="simpred">
-  <input class="removebutton" type="button" value="Find Similarities in Workset" onclick="findWorksetSimilarities('http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7', 'ws')" />
   <div id="predicates" />
-</div>
-<div id="simclus">
-  <input class="removebutton" type="button" value="Find Similarities in Data" onclick="findDataSimilarities(semdata)" />
   <div id="cluster" />
-</div>
 <div id="chart" />
 <script src="static/worksets.js" type="application/javascript"></script>
 <script src="static/similarity.js" type="application/javascript"></script>
@@ -102,7 +106,7 @@ datumWorker.onmessage = function(e) {
   var clus = document.getElementById('cluster');
 
   function findSimilarities() {
-     simWorker.postMessage(filterIds());
+     simWorker.postMessage(drillDown.filterIds());
   }
 
   function findWorksetSimilarities(data, flag) {
@@ -110,7 +114,7 @@ datumWorker.onmessage = function(e) {
   }
 
   function findDataSimilarities(data) {
-    clusterWorker.postMessage(filterIds());
+    clusterWorker.postMessage(drillDown.filterIds());
   }
 
   var simWorker = new Worker('/static/workers/simWorkWorker.js');
