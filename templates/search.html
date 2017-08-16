@@ -28,7 +28,7 @@
   <input id="semautocomplete" />
   <div id="results"></div>
 </div>
-<input class="searchbutton" type="button" value="Search Data" />
+<input class="searchbutton" type="button" value="Get Data" />
 
 <div id="data">
 </div>
@@ -95,8 +95,9 @@ var lang = document.getElementById('subject')
 var datumWorker = new Worker('/static/data.js');
 datumWorker.onmessage = function(e) {
   ldinjs.pushData(e.data);
+  ldinjs.markupSearch();
   //markup the result box
-  datum.innerHTML = drillDown.createDataList(semdata, "id-data");
+  //datum.innerHTML = drillDown.createDataList(semdata, "id-data");
   //markup the object box
   objs.innerHTML = drillDown.createObjectLists(semdata);
 }
