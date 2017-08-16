@@ -156,15 +156,27 @@ div#data {
   margin-left: 1%;
 }
 
-div#id-data {
+#id-data {
   display: inline-block;
   width: 47.5%;
   font: 0.8em arial, sans-serif;
-  /*margin-left: -1%;*/
 }
 
-div#id-data ul {
+#id-data ul {
    list-style-type: none;
+   z-index: 1;
+}
+
+#id-data ul ul li {
+  display: none;
+}
+
+#id-data ul:hover ul li {
+  display:block;
+  background-color: #a1c4d0;
+  color: #f3f1ec;
+  z-index: 99;
+  margin-left:30px;
 }
 
 div#objectlist, 
