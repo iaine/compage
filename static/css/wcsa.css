@@ -1,0 +1,215 @@
+#original,
+#linked, 
+#difference {
+   display: inline-block;
+   margin: 1%;
+   border: 1px solid;
+   width: 44%;
+   font-size: 0.75em;
+   padding: 1%;
+}
+
+#original {
+    width: 50%;
+}
+
+#linked {
+   background-color: #66CDAA; 
+}
+
+#difference {
+   background-color: #F08080;
+}
+
+/* Top navigation bar */
+#nav {
+  width: 100%;
+} 
+#primary_navigation {
+   margin-top: 2%;
+}
+
+#primary_navigation ul {
+
+   display: block;
+   list-style:none;
+   margin: 0;
+   padding: 0;
+}
+
+#primary_navigation ul li
+{
+  position:relative;
+  float:left;
+  margin:0;
+  padding:1%;
+  background-color: #001c3d;
+  color: #f3f1ec;
+   border-right: 1px solid white;
+}
+
+#primary_navigation ul li:hover
+{
+  background: #f3f1ec;
+  color: #001c3d;
+  padding: 1%;
+}
+
+#primary_navigation ul ul
+{
+  display:none;
+  position:absolute;
+  top:100%;
+  left:0;
+  background:#fff;
+  padding:0
+}
+
+#primary_navigation ul ul li
+{
+  float:none;
+  width: 900px;
+  background-color: #a1c4d0;
+  color: #f3f1ec;
+  padding: 1%;
+}
+
+#primary_navigation ul li:hover > ul
+{
+  display:block
+}
+
+#primary_navigation ul li ul li input.removebutton {
+  float: right;
+  margin-top: -0.5%;
+}
+
+/* autocomplete styling */
+#semautocomplete {
+   float: left;
+   margin: auto;
+   border-radius: 5%;
+   height: 20%;   
+}
+
+#results {
+   float:right;
+   margin: auto;
+   height: 20%; 
+   width: 60%;
+   overflow: auto;
+}
+
+.ui-widget {
+   width: 100%;
+   margin: auto;
+   font: 1.0em arial, sans-serif;
+}
+
+h3 {
+   margin:auto;
+}
+
+.ui-autocomplete {
+   list-style: none;
+   background-color: #F0F8FF;
+   width: 30%;
+}
+
+.ui-autocomplete-input {
+   width: 30%;
+   padding: 5px 3px;
+   margin: 4px 2px;
+   font: 1.0em arial, sans-serif;
+}
+
+.ui-menu .ui-menu-item a{
+    color: #96f226;
+    border-radius: 0px;
+    border: 1px solid #454545;
+}
+
+/* Hide the accessilibity but maintainfor screen readers*/
+.ui-helper-hidden-accessible {
+  position: absolute;
+  left: -9999px;
+}
+
+/* Button Styling */
+.searchbutton, 
+.removebutton {
+    background-color: #3277ae;
+    border: none;
+    color: white;
+    padding: 5px 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.0em;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+
+/* Lists */
+div#data {
+  margin-left: 1%;
+}
+
+div#id-data {
+  display: inline-block;
+  width: 47.5%;
+  font: 0.8em arial, sans-serif;
+  /*margin-left: -1%;*/
+}
+
+div#id-data ul {
+   list-style-type: none;
+}
+
+div#objectlist, 
+div#weightings, 
+div#subjects {
+   font: 0.8em arial, sans-serif;
+}
+
+div#preds, div#searchobjects {
+   display:inline-block;
+   float: left;
+   margin: 1%;
+   padding-left:1%;
+   width: 45%;
+   height: 150px;
+}
+
+div#datum {
+   width: 80%;
+}
+
+div#extradatum {
+  font: 0.8em arial, sans-serif;
+  padding-top: 1%;
+  width: 100%;
+}
+
+div#subjects ul {
+   list-style-type: none;
+}
+
+div#subjects {
+   width: 100%;
+   padding-top: 1%;
+   -webkit-column-count: 3;
+      -moz-column-count: 3;
+           column-count: 3;
+  -webkit-column-gap: 1%;
+     -moz-column-gap: 1%;
+          column-gap: 1%;
+
+}
+
+#data-title {
+   font-size: 0.8em;
+   text-align: justify;
+   text-justify: inter-word;
+}
