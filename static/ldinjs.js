@@ -21,7 +21,10 @@ var ldinjs = function () {
   *  Method to add an entity to the JSON object
   */
   function createDataObject(name, id) {
-     semdata.push({'id': id, 'value': name, 'data': new Set(), 'similarity': new Array() });
+     let _exist = semdata.filter( x => { if (x.id == id ) { return x; }});
+     if (0 == _exist.length) {
+       semdata.push({'id': id, 'value': name, 'data': new Set(), 'similarity': new Array() });
+     }
   }
 
   /**
