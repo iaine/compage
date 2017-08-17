@@ -94,7 +94,7 @@ var ldinjs = function () {
           message.id+"\")' value=\"Remove\">";
           if (0 < message.data.size ) {
            _html += "<input type=\"button\" class=\"removebutton\" onclick='drillDown.createSingleDatumList(\""+
-          message.id+"\", \"singledata\")' value=\"Show Details\">";
+          message.id+"\", \"id-data\")' value=\"Show Details\">";
           }
           if (0 < message.similarity.length ) {
               _html += "<input type=\"button\" class=\"removebutton\" onclick='sims.markUpSimilarity(\""+
