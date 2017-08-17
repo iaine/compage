@@ -46,7 +46,7 @@ def search_pred_obj():
        Search (predicate, object) associated with a workset
     '''
     graph = request.get_json()
-    data = JoinGraph(app.config['SPARQL']).search_predicates_object(graph['pred'], graph['obj'], graph['ws'])
+    data = JoinGraph(app.config['SPARQL']).search_predicates_object(graph['pred'], graph['ws'])
     return response_template(data, 200)
 
 @app.route('/predicates/similarity', methods=['POST'])
