@@ -1,13 +1,15 @@
 <!doctype html>
 <head>
 <title>WCSA+DC and Cousin Itt</title>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="static/ldinjs.js" type="application/javascript"></script>
+<script src="static/worksets.js" type="application/javascript"></script>
 <!--<script src="static/viz/bubbles.js" type="application/javascript"></script>-->
 <link rel="stylesheet" type="text/css" href="/static/css/wcsa.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/timeline.css" />
+<script>var worksetIds = workset.init();</script>
 </head> 
 <body onload="findWorksets('ignoreme')">
 <div id="nav">
@@ -18,7 +20,7 @@
   <li>Similarities
    <ul>
      <li onclick="findSimilarities(semdata)">Overall Similarities in Data</li>
-     <li onclick="findWorksetSimilarities('http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7', 'ws')">Overall Similarities in Workset</li>
+     <li onclick="findWorksetSimilarities([...worksetIds], 'ws')">Overall Similarities in Workset</li>
      <li onclick="findDataSimilarities(semdata)"> Find Similarities in Data</li>
    </ul>
   </li>
@@ -42,18 +44,20 @@
 <div id="extradatum">
   <div id="subject" />
 </div>
+<div>
 <!-- Data calculations -->
   <div id="similarities" />
   <div id="predicates" />
   <div id="cluster" />
 <!--<div id="timeline" />-->
+</div>
 <script src="static/viz/timeline.js" type="application/javascript"></script>
 <script src="static/worksets.js" type="application/javascript"></script>
 <script src="static/similarity.js" type="application/javascript"></script>
 <script src="static/drilldown.js" type="application/javascript"></script>
 <script>
     var semdata = ldinjs.init();
-
+    
     $( function() {
  
     $( "#semautocomplete" ).autocomplete({
@@ -81,7 +85,6 @@ var drillDown  =  new drillDown();
 //demo viz work
 var timeline = timeline();
 
-workset.init();
 var selectedWorkset = new Set();
 
 var ws = document.getElementById('worksets');

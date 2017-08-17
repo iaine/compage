@@ -12,9 +12,8 @@ var workset = function() {
   /**
   *  Adds an id to the Set of worksets
   */
-  function addid(workset, worksetid) {
-    workset.add(worksetid);
-    return workset;
+  function addid(worksetid) {
+    worksetIds.add(worksetid.toString());
   }
 
   /**
@@ -43,6 +42,7 @@ var workset = function() {
   * Method to get the details of the data from the workset id
   */
   function addToData(worksetid) {
+    addid(worksetid);
     var wsResponse;
 
     function wsListener () {

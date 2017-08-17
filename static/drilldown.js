@@ -61,12 +61,18 @@ drillDown = function () {
    html = "<div id=\"objectlist\">";
    objectSet.forEach( function(x) { 
        html += "<div>" + x 
-       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicatesWS(\""+x+"\", \"http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7\")' value=\"Search Workset\">"
+       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicatesWS(\""+x+"\", [" + convertSettoArray(worksetIds) + "])' value=\"Search Workset\">"
        + "<input type=\"button\" class=\"removebutton\" onclick='findPredicates(\""+x+"\")' value=\"Search All\">"
        + "</div> ";  
    });
    html += "</div>";
    return html;
+  }
+
+  function convertSettoArray(setA) {
+     let _t = new Array();
+     setA.forEach(x => _t.push('"' + x + '"'));
+     return _t;
   }
 
   //filter the data to recover all objects
