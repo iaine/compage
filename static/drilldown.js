@@ -6,9 +6,23 @@ var drillDown;
 
 drillDown = function () {
 
-   function filterIds() {
+  function filterIds() {
       var _tmp = Array();
       semdata.filter(function(d) { return _tmp.push(d.id);});
+      return _tmp;
+  }
+
+  function filterDates() {
+      var _tmp = Array();
+      semdata.forEach(function(d) { 
+         d.data.forEach(function(y) {
+             if (y.p == "http://eeboo.oerc.ox.ac.uk/eeboo/precise-publication") {
+                 let pub = parseInt(y.o);
+                 _tmp.push({"start": pub, "end": pub += 1, "label": d.value });
+             }
+        } );  
+
+      });
       return _tmp;
   }
 
@@ -30,6 +44,7 @@ drillDown = function () {
   }
 
   function markUpList(difference, divname, html) {
+    console.log(difference);
     html += "<div id='"+divname+"'><ul>";
     html += "<h3>" + difference.value + "</h3><ul>";
     difference.data.forEach(
@@ -45,9 +60,9 @@ drillDown = function () {
    listObjects(data);
    html = "<div id=\"objectlist\">";
    objectSet.forEach( function(x) { 
-       html += "<div>" + x.p 
-       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicatesWS(\""+x.p+"\", \""+x.o+"\", \"http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7\")' value=\"Search Workset\">"
-       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicates(\""+x.p+"\")' value=\"Search All\">"
+       html += "<div>" + x 
+       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicatesWS(\""+x+"\", \"http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7\")' value=\"Search Workset\">"
+       + "<input type=\"button\" class=\"removebutton\" onclick='findPredicates(\""+x+"\")' value=\"Search All\">"
        + "</div> ";  
    });
    html += "</div>";
@@ -57,8 +72,12 @@ drillDown = function () {
   //filter the data to recover all objects
   function listObjects(data) {
     data.forEach( 
-       function(d) { d.data.forEach(function(x) { objectSet.add(x);  }); }
-    );
+      function(d) { 
+        d.data.forEach(
+         function(x) { 
+             objectSet.add(x.p);
+         });
+     });
   }
 
     //subjects listing
@@ -84,6 +103,7 @@ drillDown = function () {
 
   return {
     filterIds: filterIds,
+    filterDates: filterDates,
     createDataList: createDataList, 
     createSingleDatumList: createSingleDatumList,
     createObjectLists: createObjectLists,
