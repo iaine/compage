@@ -40,17 +40,17 @@ drillDown = function () {
   */
   function createSingleDatumList(data, div) {
       let _data = semdata.filter(x => {if (x.id == data) { return x; }});
-      return markUpList(_data, div);
+      datum.innerHTML= markUpList(_data[0], div);
   }
 
   function markUpList(difference, divname, html) {
-    console.log(difference);
+
     html += "<div id='"+divname+"'><ul>";
-    html += "<h3>" + difference.value + "</h3><ul>";
+    html += "<h3 id='detail-box'>" + difference.value + "</h3>";
     difference.data.forEach(
         function (x) { html += "<li>" + x.p + " : " + x.o + "</li>"; } 
     );
-    html += "</ul></ul></div>";
+    html += "</ul></div>";
     return html;
   }
 
@@ -83,8 +83,8 @@ drillDown = function () {
     //subjects listing
   function markupSubjects(data) {
     html = "<div id='subjects'><ul>";
-    data.map( function(x) { html += '<li onclick="ldinjs.createDataObject(\"'
-             + x + '\", \"' + x + '\")">' + x + '</li>'  } );
+    data.map(function(x) { html += '<li onclick="ldinjs.createDataObject(\"'
+             + x + '\", \"' + x + '\")">' + x + '</li>'});
     html += "</ul></div>";
     return html;
   }
