@@ -122,18 +122,21 @@ class JoinGraph:
 
         return json.dumps(preds)
 
-    def search_predicates_object(self, pred, workset):
+    def search_predicates_object(self, pred, worksets):
         '''
            Search (predicate, object) pair in a workset
         '''
         sd = SparqlDao()
+        workset  = ''
+        for ws in worksets:
+            workset += '<' + ws + '>'
 
         if "http" in pred:
             qry_string = FileOps().open('query/search_predicates_uri_ws.rq')
-            qry_string = qry_string.format('<'+pred+'>', '<'+workset+'>')
+            qry_string = qry_string.format('<'+pred+'>', workset)
         else:
             qry_string = FileOps().open('query/search_predicates_literal_ws.rq')
-            qry_string = qry_string.format('<'+pred+'>', '<'+workset+'>')
+            qry_string = qry_string.format('<'+pred+'>', workset)
 
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
 
