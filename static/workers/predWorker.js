@@ -14,7 +14,7 @@ onmessage = function(e) {
   if (!e.data[1]) {
     payload = JSON.stringify({'dataObj': [e.data[0]]});
   } else {
-    payload = JSON.stringify({'dataObj': [e.data[0]], 'flag': e.data[1]}); 
+    payload = JSON.stringify({'dataObj': e.data[0], 'flag': e.data[1]}); 
   }
 
   var oReq = new XMLHttpRequest();
