@@ -93,7 +93,7 @@ var setOperations = function() {
    *  and other items in the result set. 
    */
    function markUpSimilarity(entityid) {
-     html = '<ul id="similarities">';
+     html = '<ul>';
      semdata.filter(
         function(d) {
             if (d.id == entityid) {
