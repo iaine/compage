@@ -76,7 +76,27 @@ var setOperations = function() {
     });
     return _data;
    }
+   
+   /**
+   *  Method to compare the similarity for sorting in ascending order
+   */
+   function comparator(a, b) {
+       return parseFloat(b[2]) - parseFloat(a[2]);
+   }
 
+   function sortSimilarities(dobj) {
+      return dobj.sort(comparator);
+   }
+
+   /**
+   *  Public method to get the head and tail of the similarities
+   */
+   function findHeadTail(dobj) {
+      let _headTail = Array();
+      _headTail = sortSimilarities(dobj);
+      return _headTail.slice(0, 15).concat(_headTail.slice(-15));
+   }
+   
    /**
    *  Method to create a mark up for the aggregations
    */
@@ -89,21 +109,28 @@ var setOperations = function() {
    }
 
    /**
+   *  Rounding function for readability
+   *  Assumes the num is a floating point with decimal places. 
+   */
+   function roundNumber(num) {
+     return (num * 100).toFixed(3);
+   }
+
+   /**
    *  Called from the markup to show the similarities between an item 
    *  and other items in the result set. 
    */
    function markUpSimilarity(entityid) {
      html = '<ul>';
      semdata.filter(
-        function(d) {
-            if (d.id == entityid) {
-                d.similarity.forEach( function (y) { 
-                  y.forEach(function(b) {  
-                     html += "<li onclick='sims.findSimilarity(\""+ b[0] +"\", \""+ b[1]+"\")'>" 
-                     + _findTitle(b[1]) + ':' + b[2] +  '</li>';
-                  });  
-              });
-          }
+       function(d) {
+         if (d.id == entityid) {
+           let similarityList = findHeadTail(d.similarity[0]);
+           similarityList.forEach( b => {
+             html += "<li onclick='sims.findSimilarity(\""+ b[0] +"\", \""+ b[1]+"\")'>"
+             + _findTitle(b[1]) + ':<strong>' + roundNumber(b[2]) +  '</strong></li>';
+           });
+         }
      });
      html += '</ul></div>';
      clus.innerHTML = html; 
