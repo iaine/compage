@@ -25,6 +25,7 @@ var ldinjs = function () {
      if (0 == _exist.length) {
        semdata.push({'id': id, 'value': name, 'data': new Set(), 'similarity': new Array() });
      }
+     this.markupSearch();
   }
 
   /**
