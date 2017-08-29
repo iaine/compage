@@ -182,11 +182,11 @@ h3#detail-box {
 }
 
 /* Weighting lists */
-div#objectlist, 
+/*div#objectlist, 
 div#weightings, 
 div#subjects {
    font: 0.8em arial, sans-serif;
-}
+}*/
 
 div#preds, div#searchobjects {
    display:inline-block;
@@ -222,6 +222,7 @@ div#subjects ul {
 
 div#subjects {
    width: 100%;
+   height: 40vh;
    padding-top: 1%;
    -webkit-column-count: 3;
       -moz-column-count: 3;
@@ -229,7 +230,7 @@ div#subjects {
   -webkit-column-gap: 1%;
      -moz-column-gap: 1%;
           column-gap: 1%;
-
+  overflow-y: scroll;
 }
 
 #data-title {
