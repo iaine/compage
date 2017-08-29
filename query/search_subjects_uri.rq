@@ -1,4 +1,5 @@
 #searching for subjects we may need to limit
-select ?s where {{
+select ?s ?o where {{
     ?s ?p {0} .
+    ?s rdfs:label ?o .
 }}

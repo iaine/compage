@@ -91,8 +91,11 @@ class JoinGraph:
             qry_string = FileOps().open('query/search_subjects_literal.rq')
             qry_string = qry_string.format('"'+searchterm+'"')
 
-        original = sd.list_sparql(self.endpoint, qry_string)
-        return json.dumps(original)
+        original = sd.autocomplete_sparql(self.endpoint, qry_string)
+        terms  = []
+        for data in original:
+            terms.append({'id': data[0], 'value': data[1]})
+        return json.dumps(terms)
 
     def search_predicates(self, searchterm):
         '''

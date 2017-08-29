@@ -1,6 +1,7 @@
 #searching for subjects 
-select ?s where {{
-   ?s ?p ?o .
-   filter(isLiteral(?o)) .
-   filter(str(?o) = {0}) .
+select ?s ?o where {{
+   ?s ?p ?l .
+   ?s rdfs:label ?o .
+   filter(isLiteral(?l)) .
+   filter(str(?l) = {0}) .
 }}
