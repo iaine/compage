@@ -89,8 +89,8 @@ drillDown = function () {
     //subjects listing
   function markupSubjects(data) {
     html = "<div id='subjects'><ul>";
-    data.map(function(x) { html += '<li onclick="ldinjs.createDataObject(\"'
-             + x + '\", \"' + x + '\")">' + x + '</li>'});
+    data.map(function(x) { html += "<li onclick=\"ldinjs.createDataObject('"
+             + x + "', '" + x + "')\">" + x + '</li>'});
     html += "</ul></div>";
     return html;
   }
