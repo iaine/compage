@@ -65,7 +65,7 @@ drillDown = function () {
        + "<input type=\"button\" class=\"removebutton\" onclick='findPredicates(\""+x+"\")' value=\"Search All\">"
        + "</div> ";  
    });
-   html += "</div>";
+   html += "<div onclick='drillDown.reset(objs);'>Clear</div></div>";
    return html;
   }
 
@@ -108,6 +108,10 @@ drillDown = function () {
     return html;
   }
 
+  function reset(divname) {
+    divname.innerHTML = "";
+  }
+
   return {
     filterIds: filterIds,
     filterDates: filterDates,
@@ -115,6 +119,7 @@ drillDown = function () {
     createSingleDatumList: createSingleDatumList,
     createObjectLists: createObjectLists,
     markupSubjects : markupSubjects,
-    markupPredicateWeightings : markupPredicateWeightings
+    markupPredicateWeightings : markupPredicateWeightings, 
+    reset: reset
   }
 }
