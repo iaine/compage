@@ -50,7 +50,7 @@ drillDown = function () {
     difference.data.forEach(
         function (x) { html += "<li>" + x.p + " : " + x.o + "</li>"; } 
     );
-    html += "</ul><div onclick='drillDown.reset(datum);'>Reset</div></div>";
+    html += "<div onclick='drillDown.reset(datum);'>Clear</div></ul></div>";
     return html;
   }
 
