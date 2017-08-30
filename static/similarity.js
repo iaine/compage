@@ -137,11 +137,11 @@ var setOperations = function() {
    }
 
    function markUpEntityChanges(set_union, set_difference) {
-     _html = '<div id="similarities"><h3>Similarity</h3><ul>';
+     _html = '<div id="entitysimilarities" onclick="drillDown.reset(clus)">X<div id="sim"><h3>Similarity</h3><ul>';
      set_union.forEach( function(d) {  _html += "<li>" + d.p + ' : ' + d.o + '</li>'; });
-     _html += '</ul><h3>Difference</h3><ul>'
+     _html += '</div></ul><div id="diff"><h3>Difference</h3><ul>'
      set_difference.forEach( function(d) { _html += '<li>' + d.p + ' : ' + d.o + '</li>'; });
-     return _html += '</ul></div>';
+     return _html += '</ul></div></div>';
    }
 
    /**

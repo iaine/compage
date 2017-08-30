@@ -9,7 +9,8 @@
 <!--<script src="static/viz/bubbles.js" type="application/javascript"></script>-->
 <link rel="stylesheet" type="text/css" href="/static/css/wcsa.css" />
 <link rel="stylesheet" type="text/css" href="/static/css/timeline.css" />
-<script>var worksetIds = workset.init();</script>
+<script>var worksetIds = workset.init();
+</script>
 </head> 
 <body onload="findWorksets('ignoreme')">
 <div id="nav">
@@ -19,12 +20,12 @@
   <li id="selworksets">Selected Worksets</li>
   <li>Similarities
    <ul>
+     <li onclick="findObjects(semdata)"> Find Objects</li>
      <li onclick="findSimilarities(semdata)">Overall Similarities in Data</li>
      <li onclick="findWorksetSimilarities([...worksetIds], 'ws')">Overall Similarities in Workset</li>
      <li onclick="findDataSimilarities(semdata)"> Find Similarities in Data</li>
    </ul>
   </li>
-  <li id="save"><input class="removebutton" type="button" value="Save to Workset" onclick="postData()" /><div id="wsNumber" /></li>
   </ul>
 </nav>
 </div>
@@ -34,16 +35,14 @@
   <div id="results"></div>
 </div>
 <input class="searchbutton" type="button" value="Get Data" />
-
+<input class="removebutton" type="button" value="Save to Workset" onclick="postData()" /><div id="wsNumber" />
 <div id="data">
 </div>
 <div id="datum">
   <div id="searchobjects"></div>
   <div id="preds"></div>
 </div>
-<div id="extradatum">
   <div id="subject" />
-</div>
 <div>
 <!-- Data calculations -->
   <div id="similarities" />
@@ -57,6 +56,7 @@
 <script src="static/drilldown.js" type="application/javascript"></script>
 <script>
     var semdata = ldinjs.init();
+    var drillDown  =  new drillDown();
     
     $( function() {
  
@@ -66,7 +66,7 @@
       select: function( event, ui ) {
         ldinjs.createDataObject(ui.item.value, ui.item.id);
         ldinjs.markupSearch();
-        timeline.showGraph(drillDown.filterDates());
+        //timeline.showGraph(drillDown.filterDates());
       }
     });
   } );
@@ -81,7 +81,6 @@
         postWorker.postMessage(semdata);
     }
 
-var drillDown  =  new drillDown();
 //demo viz work
 var timeline = timeline();
 
@@ -107,11 +106,11 @@ var datumWorker = new Worker('/static/data.js');
 datumWorker.onmessage = function(e) {
   ldinjs.pushData(e.data);
   ldinjs.markupSearch();
-  //markup the result box
-  //datum.innerHTML = drillDown.createDataList(semdata, "id-data");
-  //markup the object box
+  //timeline.showGraph(drillDown.filterDates());  
+}
+
+function findObjects() {
   objs.innerHTML = drillDown.createObjectLists(semdata);
-  timeline.showGraph(drillDown.filterDates());  
 }
 
   var sim = document.getElementById('similarities');
