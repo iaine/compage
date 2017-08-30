@@ -114,6 +114,10 @@ h3 {
    list-style: none;
    background-color: #F0F8FF;
    width: 30%;
+   max-height: 400px;
+    overflow-y: auto;   /* prevent horizontal scrollbar */
+    overflow-x: hidden; /* add padding to account for vertical scrollbar */
+    z-index:1000 !important;
 }
 
 .ui-autocomplete-input {
@@ -123,11 +127,11 @@ h3 {
    font: 1.0em arial, sans-serif;
 }
 
-.ui-menu .ui-menu-item a{
+/*.ui-menu .ui-menu-item a{
     color: #96f226;
     border-radius: 0px;
     border: 1px solid #454545;
-}
+}*/
 
 /* Hide the accessilibity but maintainfor screen readers*/
 .ui-helper-hidden-accessible {
@@ -167,7 +171,6 @@ div#data {
    list-style-type: none;
 }
 
-
 #id-data ul li {
   display:block;
   background-color: #f3f1ec;
@@ -175,11 +178,31 @@ div#data {
   padding: 0.5%;
 }
 
-h3#detail-box {
+h3#detail-box, 
+#sim > h3, 
+#diff > h3 {
   background-color: #003947;
   color: #f3f1ec;
   padding:1%;
 }
+
+#sim, 
+#diff {
+  display: inline-block;
+  width: 45%;
+  background-color: #f3f1ec;
+  color: #003947;
+  vertical-align:top;
+  margin: 0.25%;
+}
+
+#sim > ul,
+#diff > ul {
+  display: inline-block;
+  width: 100%;
+}
+
+
 
 /* Weighting lists */
 /*div#objectlist, 
@@ -194,7 +217,13 @@ div#preds, div#searchobjects {
    margin: 1%;
    padding-left:1%;
    width: 45%;
-   height: 150px;
+   height: 450px;
+}
+
+div#objectlist {
+  background-color: #f3f1ec;
+  color: #003947;
+  margin: 0.25%;
 }
 
 div#datum {
@@ -234,8 +263,8 @@ div#subjects {
 }
 
 div#weightings {
-   width: 600%;
-   height: 40vh;
+   width:  90%;
+   height: 400px;
    float: right;
    padding-top: 1%;
    -webkit-column-count: 3;
@@ -245,6 +274,7 @@ div#weightings {
      -moz-column-gap: 1%;
           column-gap: 1%;
   overflow-y: scroll;
+  overflow-x: scroll;
 }
 
 #data-title {
