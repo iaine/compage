@@ -29,7 +29,12 @@ def search_data():
 
 @app.route('/')
 def get_index():
-    return render_template('search.html')
+    workset = request.args.get('wsid')
+    user = request.args.get('user')
+    if workset is None:
+        return render_template('search.html')
+    else:
+        return render_template('test.html', workset=workset, user=user)
 
 @app.route('/predicates', methods=['POST'])
 def sparql():
@@ -94,7 +99,7 @@ def save_workset():
        Returns a dummy method
     '''
     ws_id = request.get_json()
-    uid = Convert().dump_to_disk(app.config['fs'], ws_id['dataObj'])
+    uid = Convert().dump_to_disk(app.config['fs'], ws_id['dataObj'], ws_id['user'])
     return response_template(uid, 200)
     
 
