@@ -48,7 +48,7 @@ drillDown = function () {
     html += "<div id='"+divname+"'><ul>";
     html += "<h3 id='detail-box'>" + difference.value + "</h3>";
     difference.data.forEach(
-        function (x) { html += "<li>" + x.p + " : " + x.o + "</li>"; } 
+        function (x) { html += "<li>" + x.p + " : <strong>" + x.o + "</strong></li>"; } 
     );
     html += "<div onclick='drillDown.reset(datum);'>Clear</div></ul></div>";
     return html;
