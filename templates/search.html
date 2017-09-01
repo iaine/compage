@@ -35,7 +35,7 @@
   <div id="results"></div>
 </div>
 <input class="searchbutton" type="button" value="Get Data" />
-<input class="removebutton" type="button" value="Save to Workset" onclick="postData()" /><div id="wsNumber" />
+<input class="removebutton" type="button" value="Save to Workset" onclick="postData('ignoreme')" /><div id="wsNumber" />
 <div id="data">
 </div>
 <div id="datum">
@@ -77,8 +77,8 @@
         postdata.innerHTML = "<div id='wsNum'>"+retdata+'</div>';
     }
 
-    function postData() {
-        postWorker.postMessage(semdata);
+    function postData(usrname) {
+        postWorker.postMessage([usrname, semdata]);
     }
 
 //demo viz work
