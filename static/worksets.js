@@ -13,6 +13,7 @@ var workset = function() {
   *  Adds an id to the Set of worksets
   */
   function addid(worksetid) {
+    //worksetid.forEach( x => worksetIds.add(x.toString()); );
     worksetIds.add(worksetid.toString());
   }
 

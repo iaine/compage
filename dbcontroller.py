@@ -196,7 +196,13 @@ class JoinGraph:
           Method to get all ids from a known workset
         '''
         sd = SparqlDao()
-        qry_string = FileOps().open('query/worksetsid.rq').format('<'+workset_id+'>')
+        print(workset_id)
+        workset = ""
+        for wid in workset_id:
+            print(wid)
+            workset += '<' + str(wid) + '>'
+
+        qry_string = FileOps().open('query/worksetsid.rq').format(workset)
 
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
 

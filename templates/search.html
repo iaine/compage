@@ -48,9 +48,9 @@
   <div id="similarities" />
   <div id="predicates" />
   <div id="cluster" />
-<!--<div id="timeline" />-->
+<div id="timeline" />
 </div>
-<script src="static/viz/timeline.js" type="application/javascript"></script>
+<!--<script src="static/viz/timeline.js" type="application/javascript"></script>-->
 <script src="static/worksets.js" type="application/javascript"></script>
 <script src="static/similarity.js" type="application/javascript"></script>
 <script src="static/drilldown.js" type="application/javascript"></script>
@@ -66,7 +66,6 @@
       select: function( event, ui ) {
         ldinjs.createDataObject(ui.item.value, ui.item.id);
         ldinjs.markupSearch();
-        //timeline.showGraph(drillDown.filterDates());
       }
     });
   } );
@@ -82,7 +81,7 @@
     }
 
 //demo viz work
-var timeline = timeline();
+//var timeline = timeline();
 
 var selectedWorkset = new Set();
 
