@@ -1,0 +1,199 @@
+<!doctype html>
+<head>
+<title>WCSA+DC and Cousin Itt</title>
+<!--<script src="http://d3js.org/d3.v3.min.js"></script>-->
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="static/ldinjs.js" type="application/javascript"></script>
+<script src="static/worksets.js" type="application/javascript"></script>
+<!--<script src="static/viz/bubbles.js" type="application/javascript"></script>-->
+<link rel="stylesheet" type="text/css" href="/static/css/wcsa.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/timeline.css" />
+<script>var worksetIds = workset.init();
+var usr = '{{ user }}';
+</script>
+</head> 
+<body onload="findWorksets('{{ workset }}')">
+<div id="nav">
+<nav id="primary_navigation">
+  <ul>
+  <li id="worksets">Your Worksets</li>
+  <li id="selworksets">Selected Worksets</li>
+  <li>Similarities
+   <ul>
+     <li onclick="findObjects(semdata)"> Find Objects</li>
+     <li onclick="findSimilarities(semdata)">Overall Similarities in Data</li>
+     <li onclick="findWorksetSimilarities([...worksetIds], 'ws')">Overall Similarities in Workset</li>
+     <li onclick="findDataSimilarities(semdata)"> Find Similarities in Data</li>
+   </ul>
+  </li>
+  </ul>
+</nav>
+</div>
+
+<div class="ui-widget">
+  <input id="semautocomplete" />
+  <div id="results"></div>
+</div>
+<input class="searchbutton" type="button" value="Get Data" />
+<input class="removebutton" type="button" value="Save to Workset" onclick="postData(usr)" /><div id="wsNumber" />
+<div id="data">
+</div>
+<div id="datum">
+  <div id="searchobjects"></div>
+  <div id="preds"></div>
+</div>
+  <div id="subject" />
+<div>
+<!-- Data calculations -->
+  <div id="similarities" />
+  <div id="predicates" />
+  <div id="cluster" />
+<!--<div id="timeline" />-->
+</div>
+<script src="static/viz/timeline.js" type="application/javascript"></script>
+<script src="static/worksets.js" type="application/javascript"></script>
+<script src="static/similarity.js" type="application/javascript"></script>
+<script src="static/drilldown.js" type="application/javascript"></script>
+<script>
+    var semdata = ldinjs.init();
+    var drillDown  =  new drillDown();
+    var usr = '{{ user }}';
+    
+    $( function() {
+ 
+    $( "#semautocomplete" ).autocomplete({
+      source: "/search",
+      minLength: 3,
+      select: function( event, ui ) {
+        ldinjs.createDataObject(ui.item.value, ui.item.id);
+        ldinjs.markupSearch();
+        //timeline.showGraph(drillDown.filterDates());
+      }
+    });
+  } );
+    var postdata = document.getElementById('wsNumber');
+    var postWorker = new Worker('static/workers/postWorker.js');
+    postWorker.onmessage = function(e) {
+        let retdata = (!e.data)? "Cannot be saved" : e.data;
+        postdata.innerHTML = "<div id='wsNum'>"+retdata+'</div>';
+    }
+
+    function postData(usrname, srchdata) {
+        postWorker.postMessage([usrname,srchdata]);
+    }
+
+//demo viz work
+var timeline = timeline();
+
+var selectedWorkset = new Set();
+
+var ws = document.getElementById('worksets');
+var worksetWorker = new Worker('static/workers/worksetWorker.js');
+worksetWorker.onmessage = function(e) {
+   ws.innerHTML = workset.markup(e.data);
+}
+
+//Worker to get the data
+var datum = document.getElementById('data');
+var objs = document.getElementById('searchobjects');
+var sparql = document.getElementById('preds');
+var lang = document.getElementById('subject')
+
+var datumWorker = new Worker('/static/data.js');
+datumWorker.onmessage = function(e) {
+  ldinjs.pushData(e.data);
+  ldinjs.markupSearch();
+  //timeline.showGraph(drillDown.filterDates());  
+}
+//http://127.0.0.1:5000/?wsid=workset_080e9c11a1b8491e823808e8d9e294f7;workset_2b9e53c8988249359aa3212784796106&user=iaine
+//http://eeboo.oerc.ox.ac.uk/worksets/workset_080e9c11a1b8491e823808e8d9e294f7
+function findWorksets(username) {
+  //for now we ignore the username here, hardcoded in sparql
+  worksetWorker.postMessage([username]);
+  let wsArr = username.split(';');
+  let wsBase = Array();
+  wsArr.forEach( function(x) { wsBase.push('http://eeboo.oerc.ox.ac.uk/worksets/' + x); } );
+  console.log(wsBase);
+  workset.addToData(wsBase);
+}
+
+
+function findObjects() {
+  objs.innerHTML = drillDown.createObjectLists(semdata);
+}
+
+  var sim = document.getElementById('similarities');
+  var pred = document.getElementById('predicates');
+  var clus = document.getElementById('cluster');
+
+  function findSimilarities() {
+     simWorker.postMessage(drillDown.filterIds());
+  }
+
+  function findWorksetSimilarities(data, flag) {
+    predWorker.postMessage([data, flag]);
+  }
+
+  function findDataSimilarities(data) {
+    clusterWorker.postMessage(drillDown.filterIds());
+  }
+
+  var simWorker = new Worker('/static/workers/simWorkWorker.js');
+  simWorker.onmessage = function(e) {
+    sim.innerHTML = sims.markUpAggregations(e.data);
+  }
+  var sims = setOperations();
+  var predWorker = new Worker('/static/workers/predWorker.js');
+  predWorker.onmessage = function(e) {
+    pred.innerHTML = sims.markUpAggregations(e.data);
+  }
+
+  var sims = setOperations()
+  var clusterWorker = new Worker('/static/workers/clusterWorker.js');
+  clusterWorker.onmessage = function(e) {
+    ldinjs.addSimilaritytoObject(e.data);
+  }
+  /* Similarity */
+  /**
+  *  Method to search the worksets for (pred, obj) pairs
+  */
+  function findPredicatesWS(pred,ws) {
+    sparqlWorker.postMessage([pred,ws]);
+  }
+
+  /**
+  *  Method to search the whole graph for (pred, obj) pairs
+  */
+  function findPredicates(uriA) {
+    sparqlWorker.postMessage([uriA]);
+  }
+
+  //Worker to fetch the subjects per predicate
+  var langWorker = new Worker('/static/subject.js');
+    langWorker.onmessage = function(e) {
+    lang.innerHTML = drillDown.markupSubjects(e.data);
+  }
+
+  //Worker to get the predicates
+  var sparqlWorker = new Worker('/static/workers/sparql.js');
+    sparqlWorker.onmessage = function(e) {
+    sparql.innerHTML = drillDown.markupPredicateWeightings(e.data);
+  }
+
+  /**
+  *  Find a subject to a predicate and search knowledge base
+  */
+  function associateSubject(uri) {
+    langWorker.postMessage([uri]);
+  }
+
+  //script to send data to server
+  $(".searchbutton").click(function() {
+    var searchData = Array();
+    semdata.forEach(function (d) { searchData.push(d.id);  } );
+    datumWorker.postMessage([usr, searchData]);
+  });
+</script>
+</body>
+</html>
