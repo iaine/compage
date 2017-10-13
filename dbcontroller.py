@@ -67,6 +67,25 @@ class JoinGraph:
 
         qry_string = FileOps().open('query/search_string.rq')
         qry_string = qry_string.format(term)
+
+        original = sd.autocomplete_sparql(self.endpoint, qry_string)
+
+        terms  = []
+        for data in original:
+            terms.append({'id': data[0], 'value': data[1]})
+
+        return json.dumps(terms)
+
+    def search_data_type(self, term, data_type):
+        '''
+           Perform substring search on data limited by a type and return JSON
+        '''
+        original = []
+        sd = SparqlDao()
+
+        qry_string = FileOps().open('query/search_string_type.rq')
+        qry_string = qry_string.format(term, 'http://eeboo.oerc.ox.ac.uk/eeboo/' + data_type)
+
         original = sd.autocomplete_sparql(self.endpoint, qry_string)
 
         terms  = []
@@ -169,6 +188,7 @@ class JoinGraph:
             searchterm += '<' + str(g) + '>'
 
         qry_string = FileOps().open('query/original_author.rq')
+
         qry_string = qry_string.format(searchterm)
 
 
@@ -196,10 +216,9 @@ class JoinGraph:
           Method to get all ids from a known workset
         '''
         sd = SparqlDao()
-        print(workset_id)
+
         workset = ""
         for wid in workset_id:
-            print(wid)
             workset += '<' + str(wid) + '>'
 
         qry_string = FileOps().open('query/worksetsid.rq').format(workset)
