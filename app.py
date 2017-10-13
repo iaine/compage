@@ -21,20 +21,32 @@ def get_single_data():
     data = JoinGraph(app.config['SPARQL']).get_original(graph['data'])
     return response_template(data, 200)
 
-@app.route('/search')
+@app.route('/search/')
 def search_data():
     search = request.args.get('term')
     data = JoinGraph(app.config['SPARQL']).search_data(search)
+    return response_template(data, 200)
+
+@app.route('/search/<dtype>')
+def search_data_type(dtype):
+    search = request.args.get('term')
+    #dtype = request.args.get('type')
+    print("hello: " + str(dtype))
+    if dtype is not None:
+        data = JoinGraph(app.config['SPARQL']).search_data_type(search, dtype)
+    else:
+        data = JoinGraph(app.config['SPARQL']).search_data(search)
     return response_template(data, 200)
 
 @app.route('/')
 def get_index():
     workset = request.args.get('wsid')
     user = request.args.get('user')
+    dtype = request.args.get('type')
     if workset is None:
         return render_template('search.html')
     else:
-        return render_template('test.html', workset=workset, user=user)
+        return render_template('test.html', workset=workset, user=user, dtype=dtype)
 
 @app.route('/predicates', methods=['POST'])
 def sparql():
