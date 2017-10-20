@@ -43,21 +43,6 @@ drillDown = function () {
       datum.innerHTML= markUpList(_data[0], div);
   }
 
-  /**
-  *  Find the percentage of objects in data set for a given predicate
-  *  and return the object and weighting for data in the cached result set
-  */
-  function findSimilarityResultSet(pred) {
-      let obj = findObjectsByPredicate(pred);
-      let objPredSet = new Set(obj);
-  }
-
-  function findObjectsByPredicate(pred) {
-    let objPred = Array();
-    semdata.filter(x => { x.data.filter(y => { if (y.d == pred) { objPred.push(y.o); }}) });
-    return objPred;
-   }
-
   function markUpList(difference, divname, html) {
 
     html += "<div id='"+divname+"'><ul>";
@@ -107,15 +92,22 @@ drillDown = function () {
    * and add the object to the set
    */
    function findSimilarityResultSet(predicate) {
-       RSsimilar = new Set();
+       RSsimilar = new Array();
        semdata.forEach(
            x => { x.data.forEach( y => {
-              if (y.p == predicate) { RSsimilar.add(y.o); }
+              if (y.p == predicate) { RSsimilar.push(y.o); }
            });
        });
-       console.log("in loop");
-       console.log(RSsimilar);
-       //return drillDown.markupPredicateWeightings(RSsimilar);
+
+       rset = new Set(RSsimilar);
+       weightings = new Array(); //can't have duplicates in the list
+       rset.forEach( l => { 
+         _tmp = Array();
+         RSsimilar.forEach( o => { if(o == l) {_tmp.push(o); }  });
+         let countObj = _tmp.length / RSsimilar.length; 
+         weightings.push({ "predicate": l, "weight": sims.roundNumber(countObj), "count": RSsimilar.length});     
+       } );
+       sparql.innerHTML = this.markupPredicateWeightings(weightings);
    }
 
     //subjects listing
@@ -132,7 +124,7 @@ drillDown = function () {
   // show the predicate weightings in a simple list for now
   function markupPredicateWeightings(data) {
     html = "<div id='weightings'>";
-    console.log("in map");
+    console.log(data);
     data.map( function(x) { 
         html += "<div onclick=\"associateSubject('"+x.predicate+"')\">" 
                 + x.predicate + " : " + x.weight + "%</div>";  
