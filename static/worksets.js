@@ -13,6 +13,7 @@ var workset = function() {
   *  Adds an id to the Set of worksets
   */
   function addid(worksetid) {
+    //worksetid.forEach( x => worksetIds.add(x.toString()); );
     worksetIds.add(worksetid.toString());
   }
 
@@ -32,7 +33,7 @@ var workset = function() {
   function markup(workids) {
     html = "Your Worksets<ul id='workset-id'>";
     workids.forEach( 
-      function(y) { html += "<li>"+ y.value + "<input type=\"button\" class=\"removebutton\" onclick='workset.addToData(\""+y.id+"\")' value=\"Add to Data\"></li>"; }
+      function(y) { html += "<li>"+ y.value + "<input type=\"button\" class=\"removebutton\" onclick='workset.addToData([\""+y.id+"\"])' value=\"Add to Data\"></li>"; }
     );
     html += "</ul>";
     return html;

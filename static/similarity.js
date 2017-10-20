@@ -60,7 +60,8 @@ var setOperations = function() {
       let set_A = _getData(entityA);
       let set_B = _getData(entityB);
       let t = this.calculateSetIntersect(set_A, set_B);
-      clus.innerHTML = markUpEntityChanges(t,
+      clus.innerHTML = markUpEntityChanges(_findTitleBox(set_A), 
+             _findTitleBox(set_B), t,
              this.calculateSetDifference(t, set_B));
    }
 
@@ -136,12 +137,23 @@ var setOperations = function() {
      clus.innerHTML = html; 
    }
 
-   function markUpEntityChanges(set_union, set_difference) {
-     _html = '<div id="entitysimilarities" onclick="drillDown.reset(clus)">X<div id="sim"><h3>Similarity</h3><ul>';
+   function markUpEntityChanges(titleA, titleB, set_union, set_difference) {
+     _html = '<div id="entitysimilarities">';
+     _html += '<div id="sim"><h3>' + titleA +'</h3><br /><h3>Similarity</h3><ul>';
      set_union.forEach( function(d) {  _html += "<li>" + d.p + ' : ' + d.o + '</li>'; });
-     _html += '</div></ul><div id="diff"><h3>Difference</h3><ul>'
+     _html += '</div></ul><div id="diff"><h3>' + titleB +'</h3><br /><h3>Difference</h3><ul>'
      set_difference.forEach( function(d) { _html += '<li>' + d.p + ' : ' + d.o + '</li>'; });
-     return _html += '</ul></div></div>';
+     return _html += '<div id="reset" onclick="drillDown.reset(clus)">Clear</div></ul></div></div>';
+   }
+
+   /**
+   *  Method to get the title for the similarity box
+   */
+   function _findTitleBox(dataset) {
+     let _title = '';
+     dataset.forEach(x => { if (x.p == 'http://www.w3.org/2000/01/rdf-schema#label') { _title = x.o;} 
+     });
+     return _title;
    }
 
    /**

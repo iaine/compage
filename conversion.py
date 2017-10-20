@@ -14,12 +14,13 @@ class Convert():
     def __init__ (self):
         self.EEBO = Namespace("http://eeboo.oerc.ox.ac.uk/")
 
-    def dump_to_disk(self, fs, data):
+    def dump_to_disk(self, fs, data, user):
         if data is None:
             raise Exception("Data is empty")
         _data = json.dumps(data)
+
         for d in data:
-            with open(fs + str(time.time())+".json", 'wb') as f:
+            with open(fs + user + "_" + str(time.time())+".json", 'wb') as f:
                 f.write(json.dumps(d))
         return json.dumps({ "id": self._generate_uid()})
 

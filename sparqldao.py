@@ -46,7 +46,7 @@ class SparqlDao:
            Method for autocomplete sparql
         '''
         data = []
-
+  
         sparql = SPARQLWrapper(endpoint)
         sparql.method='POST'
         sparql.setQuery(query)
