@@ -167,6 +167,7 @@ var setOperations = function() {
    }
 
    return {
+     roundNumber: roundNumber,
      calculateSetUnion: calculateSetUnion,
      calculateSetIntersect: calculateSetIntersect,
      calculateSetDifference: calculateSetDifference,

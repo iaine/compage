@@ -97,6 +97,12 @@ def get_workset():
     ws = JoinGraph(app.config['SPARQL']).worksets()
     return response_template(ws, 200)
 
+@app.route('/worksets/item', methods=['POST'])
+def get_item():
+    _id = request.get_json();
+    ws = JoinGraph(app.config['SPARQL']).id_details(_id['id'])
+    return response_template(ws, 200)
+
 @app.route('/worksets/items', methods=['POST'])
 def get_workset_items():
     ws_id = request.get_json()

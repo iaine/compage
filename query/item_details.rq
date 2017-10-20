@@ -1,4 +1,4 @@
 #Sparql to get an item details by ID
-select * {{
-   {0} ?p ?o.
+select ?s ?o {{
+   {0} ?s ?o.
 }}

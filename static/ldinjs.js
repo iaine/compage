@@ -93,10 +93,10 @@ var ldinjs = function () {
       semdata.forEach( function(message) { _html += '<div id="data-title">' + message.value + 
          "<input type=\"button\" class=\"removebutton\" onclick='ldinjs.remove(\""+
           message.id+"\")' value=\"Remove\">";
-          if (0 < message.data.size ) {
+          //if (0 < message.data.size ) {
            _html += "<input type=\"button\" class=\"removebutton\" onclick='drillDown.createSingleDatumList(\""+
           message.id+"\", \"id-data\")' value=\"Show Details\">";
-          }
+          //}
           if (0 < message.similarity.length ) {
               _html += "<input type=\"button\" class=\"removebutton\" onclick='sims.markUpSimilarity(\""+
                  message.id+"\")' value=\"Show Similar\">";

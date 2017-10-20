@@ -40,7 +40,30 @@ drillDown = function () {
   */
   function createSingleDatumList(data, div) {
       let _data = semdata.filter(x => { if (x.id == data) { return x; }});
+      
+      console.log(_data[0].data.size);
+      if (_data[0].data.size == 0) {
+        //we don't have data so get it for the id from the store
+        // and recursively load the function when added
+        _getDataList(data, div); 
+        //createSingleDatumList(data, div);
+      }
       datum.innerHTML= markUpList(_data[0], div);
+  }
+
+  function _getDataList(dataid, div) {
+
+     function dataListener() {
+         var workerResult = JSON.parse(this.responseText);
+         console.log(workerResult);
+         workerResult.forEach( x => { ldinjs.addDataToObject(dataid, x[0], x[1]); });
+         createSingleDatumList(dataid, div);
+     }
+     var oReq = new XMLHttpRequest();
+     oReq.open("POST", '/worksets/item', true);
+     oReq.addEventListener("load", dataListener);
+     oReq.setRequestHeader("Content-type", "application/json");
+     oReq.send(JSON.stringify({ 'id': dataid}));
   }
 
   function markUpList(difference, divname, html) {

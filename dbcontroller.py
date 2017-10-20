@@ -211,6 +211,18 @@ class JoinGraph:
 
         return json.dumps(preds)
 
+    def id_details(self, itemid):
+        '''
+           Method to get an item's details
+        '''
+        sd = SparqlDao()
+
+        qry_string = FileOps().open('query/item_details.rq').format('<'+itemid+'>')
+
+        data = sd.autocomplete_sparql(self.endpoint, qry_string)
+
+        return json.dumps(data)
+
     def worksets_by_id(self, workset_id):
         '''
           Method to get all ids from a known workset
