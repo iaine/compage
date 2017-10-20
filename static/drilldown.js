@@ -39,9 +39,24 @@ drillDown = function () {
   *  Method to get the details for the object
   */
   function createSingleDatumList(data, div) {
-      let _data = semdata.filter(x => {if (x.id == data) { return x; }});
+      let _data = semdata.filter(x => { if (x.id == data) { return x; }});
       datum.innerHTML= markUpList(_data[0], div);
   }
+
+  /**
+  *  Find the percentage of objects in data set for a given predicate
+  *  and return the object and weighting for data in the cached result set
+  */
+  function findSimilarityResultSet(pred) {
+      let obj = findObjectsByPredicate(pred);
+      let objPredSet = new Set(obj);
+  }
+
+  function findObjectsByPredicate(pred) {
+    let objPred = Array();
+    semdata.filter(x => { x.data.filter(y => { if (y.d == pred) { objPred.push(y.o); }}) });
+    return objPred;
+   }
 
   function markUpList(difference, divname, html) {
 
@@ -115,6 +130,7 @@ drillDown = function () {
   return {
     filterIds: filterIds,
     filterDates: filterDates,
+    findSimilarityResultSet: findSimilarityResultSet,
     createDataList: createDataList, 
     createSingleDatumList: createSingleDatumList,
     createObjectLists: createObjectLists,
