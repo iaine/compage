@@ -124,7 +124,6 @@ drillDown = function () {
   // show the predicate weightings in a simple list for now
   function markupPredicateWeightings(data) {
     html = "<div id='weightings'>";
-    console.log(data);
     data.map( function(x) { 
         html += "<div onclick=\"associateSubject('"+x.predicate+"')\">" 
                 + x.predicate + " : " + x.weight + "%</div>";  
