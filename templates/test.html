@@ -59,11 +59,14 @@ var usr = '{{ user }}';
     var semdata = ldinjs.init();
     var drillDown  =  new drillDown();
     var usr = '{{ user }}';
-    
+    var searchUrl = '/search/{{ dtype }}'
+
+    console.log("Search url " + searchUrl);
     $( function() {
  
     $( "#semautocomplete" ).autocomplete({
-      source: "/search",
+      //source: "/search",
+      source: searchUrl, 
       minLength: 3,
       select: function( event, ui ) {
         ldinjs.createDataObject(ui.item.value, ui.item.id);
@@ -114,7 +117,6 @@ function findWorksets(username) {
   let wsArr = username.split(';');
   let wsBase = Array();
   wsArr.forEach( function(x) { wsBase.push('http://eeboo.oerc.ox.ac.uk/worksets/' + x); } );
-  console.log(wsBase);
   workset.addToData(wsBase);
 }
 
@@ -192,7 +194,7 @@ function findObjects() {
   $(".searchbutton").click(function() {
     var searchData = Array();
     semdata.forEach(function (d) { searchData.push(d.id);  } );
-    datumWorker.postMessage([usr, searchData]);
+    datumWorker.postMessage(searchData);
   });
 </script>
 </body>
