@@ -62,6 +62,7 @@ drillDown = function () {
    objectSet.forEach( function(x) { 
        html += "<div>" + x 
        + "<input type=\"button\" class=\"removebutton\" onclick='findPredicatesWS(\""+x+"\", [" + convertSettoArray(worksetIds) + "])' value=\"Search Workset\">"
+       + "<input type=\"button\" class=\"removebutton\" onclick='drillDown.findSimilarityResultSet(\""+x+"\")' value=\"Search Results\">"
        + "<input type=\"button\" class=\"removebutton\" onclick='findPredicates(\""+x+"\")' value=\"Search All\">"
        + "</div> ";  
    });
@@ -86,6 +87,22 @@ drillDown = function () {
      });
   }
 
+   /**
+   * Function to find the predicates in the existing result set
+   * and add the object to the set
+   */
+   function findSimilarityResultSet(predicate) {
+       RSsimilar = new Set();
+       semdata.forEach(
+           x => { x.data.forEach( y => {
+              if (y.p == predicate) { RSsimilar.add(y.o); }
+           });
+       });
+       console.log("in loop");
+       console.log(RSsimilar);
+       //return drillDown.markupPredicateWeightings(RSsimilar);
+   }
+
     //subjects listing
   function markupSubjects(data) {
     html = "<div id='subjects'><ul>";
@@ -100,6 +117,7 @@ drillDown = function () {
   // show the predicate weightings in a simple list for now
   function markupPredicateWeightings(data) {
     html = "<div id='weightings'>";
+    console.log("in map");
     data.map( function(x) { 
         html += "<div onclick=\"associateSubject('"+x.predicate+"')\">" 
                 + x.predicate + " : " + x.weight + "%</div>";  
@@ -118,6 +136,7 @@ drillDown = function () {
     createDataList: createDataList, 
     createSingleDatumList: createSingleDatumList,
     createObjectLists: createObjectLists,
+    findSimilarityResultSet: findSimilarityResultSet,
     markupSubjects : markupSubjects,
     markupPredicateWeightings : markupPredicateWeightings, 
     reset: reset

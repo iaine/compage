@@ -31,7 +31,6 @@ def search_data():
 def search_data_type(dtype):
     search = request.args.get('term')
     #dtype = request.args.get('type')
-    print("hello: " + str(dtype))
     if dtype is not None:
         data = JoinGraph(app.config['SPARQL']).search_data_type(search, dtype)
     else:
