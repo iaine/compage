@@ -16,3 +16,5 @@ for the remote back end.
 # Author
 
 Iain Emsley <iain.emsley@oerc.ox.ac.uk>
+
+[![DOI](https://zenodo.org/badge/97571060.svg)](https://zenodo.org/badge/latestdoi/97571060)
