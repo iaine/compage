@@ -1,5 +1,6 @@
 #search for substring. Used in autocomplete
 select ?s ?o where {{
    ?s rdfs:label ?o .
+   ?s rdf:type <http://dbpedia.org/ontology/Person> .
    filter (regex(?o, "^{0}", "i")) .
 }} LIMIT 10
