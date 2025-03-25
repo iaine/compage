@@ -1,3 +1,5 @@
+This code is now archived. 
+
 Compage
 =======
 
